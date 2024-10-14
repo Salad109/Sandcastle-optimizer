@@ -18,13 +18,16 @@ public class Main {
         System.out.println(bucketList);
         System.out.println(weightsCalculator);
 
-        for (Bucket bucket : bucketList) {
-            double A = bucket.angle;
-            double step = 0.5;
-            for (double V = bucket.volume; V > 0; V -= step)
-                castleList.getFirst().addLayer(step, A);
+        for (Castle castle : castleList) {
+            building:
+            for (Bucket bucket : bucketList) {
+                double A = bucket.angle;
+                double step = 10;
+                for (double V = bucket.volume; V > 0; V -= step)
+                    if (castle.isComplete()) break building;
+                castle.addLayer(step, A);
+            }
+            System.out.println(castle);
         }
-        castleList.getFirst().printLayers();
-        System.out.println(castleList.getFirst());
     }
 }

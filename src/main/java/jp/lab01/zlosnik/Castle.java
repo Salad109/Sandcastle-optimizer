@@ -41,6 +41,9 @@ public class Castle {
 
         double PI = Math.PI;
         double topBase = Math.cbrt((baseRadius * baseRadius * baseRadius) - ((12 * volume) / (PI * tanTheta)));
+        if (topBase < 0) {
+            throw new IllegalArgumentException("Top base must not be negative");
+        }
         height += 3 * volume / (PI * ((baseRadius * baseRadius) + (baseRadius * topBase) + (topBase * topBase)));
         baseRadius = topBase;
         this.volume = ((double) 1 / 3) * PI * height * ((initialRadius * initialRadius) + (initialRadius * topBase) + (topBase * topBase));
@@ -48,14 +51,18 @@ public class Castle {
 
     public void printLayers() {
         System.out.printf("Layers of castle %d, top to bottom:\n", number);
-        int j = 0;
+        int j = layers.size() - 1;
         for (int i = layers.size() - 1; i >= 0; i--) {
-            System.out.println(j++ + ": " + layers.get(i).toString());
+            System.out.println(j-- + ": " + layers.get(i).toString());
         }
+    }
+
+    public boolean isComplete() {
+        return baseRadius <= 0;
     }
 
     @Override
     public String toString() {
-        return String.format("Castle(Number: %d, Initial radius: %f, Current top radius: %f, Height: %f, Volume: %f)", number, initialRadius, baseRadius, height, volume);
+        return String.format("Castle(Number: %d, Initial radius: %f, Current top radius: %f, Height: %f, Volume: %f, Layer count: %d)", number, initialRadius, baseRadius, height, volume, layers.size());
     }
 }
