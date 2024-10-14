@@ -5,18 +5,8 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class DataReader {
-    File castlesFile;
-    File bucketsFile;
-    File weightsFile;
-
-    DataReader(File castlesFile, File bucketsFile, File weightsFile){
-        this.castlesFile = castlesFile;
-        this.bucketsFile = bucketsFile;
-        this.weightsFile = weightsFile;
-    }
-
-    public ArrayList<Castle> getCastles(File castlesFile) {
+public abstract class DataReader {
+    public static ArrayList<Castle> getCastles(File castlesFile) {
         ArrayList<Castle> castleList = new ArrayList<>();
         Scanner castleScanner;
         try {
@@ -37,7 +27,7 @@ public class DataReader {
         return castleList;
     }
 
-    public ArrayList<Bucket> getBuckets(File bucketsFile) {
+    public static ArrayList<Bucket> getBuckets(File bucketsFile) {
         ArrayList<Bucket> bucketList = new ArrayList<>();
         Scanner bucketScanner;
         try {
@@ -59,7 +49,7 @@ public class DataReader {
         return bucketList;
     }
 
-    public WeightsCalculator getWeights(File weightsFile) {
+    public static WeightsCalculator getWeights(File weightsFile) {
         Scanner weightsScanner;
         try {
             weightsScanner = new Scanner(weightsFile);

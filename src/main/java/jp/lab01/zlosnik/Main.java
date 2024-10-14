@@ -6,14 +6,13 @@ import java.util.ArrayList;
 
 public class Main {
     public static void main(String[] args) {
-        File castlesFile = new File("/home/mat/Desktop/Sandcastle-Maven/src/main/java/jp/lab01/zlosnik/miejsca.txt");
-        File bucketsFile = new File("/home/mat/Desktop/Sandcastle-Maven/src/main/java/jp/lab01/zlosnik/wiaderka.txt");
-        File weightsFile = new File("/home/mat/Desktop/Sandcastle-Maven/src/main/java/jp/lab01/zlosnik/wagi.txt");
-        var reader = new DataReader(castlesFile, bucketsFile, weightsFile);
+        File castlesFile = new File("/home/mat/Desktop/Sandcastle/src/main/java/jp/lab01/zlosnik/miejsca.txt");
+        File bucketsFile = new File("/home/mat/Desktop/Sandcastle/src/main/java/jp/lab01/zlosnik/wiaderka.txt");
+        File weightsFile = new File("/home/mat/Desktop/Sandcastle/src/main/java/jp/lab01/zlosnik/wagi.txt");
 
-        ArrayList<Castle> castleList = reader.getCastles(castlesFile);
-        ArrayList<Bucket> bucketList = reader.getBuckets(bucketsFile);
-        WeightsCalculator weightsCalculator = reader.getWeights(weightsFile);
+        ArrayList<Castle> castleList = DataReader.getCastles(castlesFile);
+        ArrayList<Bucket> bucketList = DataReader.getBuckets(bucketsFile);
+        WeightsCalculator weightsCalculator = DataReader.getWeights(weightsFile);
 
         System.out.println(castleList);
         System.out.println(bucketList);
@@ -28,6 +27,5 @@ public class Main {
         System.out.println(castleList.getFirst());
         castleList.getFirst().addSand(15, bucketList.getFirst().angle);
         System.out.println(castleList.getFirst());
-
     }
 }
