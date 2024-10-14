@@ -26,7 +26,5 @@ public class Main {
         }
         castleList.getFirst().printLayers();
         System.out.println(castleList.getFirst());
-
-        double x = 1;
     }
 }
