@@ -14,7 +14,7 @@ public class Castle {
 
         @Override
         public String toString() {
-            return String.format("Layer(volume=%f, angle=%f", volume, angle);
+            return String.format("Layer(volume=%f, angle=%f)", volume, angle);
         }
     }
 
@@ -48,8 +48,9 @@ public class Castle {
 
     public void printLayers() {
         System.out.printf("Layers of castle %d, top to bottom:\n", number);
+        int j = 0;
         for (int i = layers.size() - 1; i >= 0; i--) {
-            System.out.println(layers.get(i).toString());
+            System.out.println(j++ + ": " + layers.get(i).toString());
         }
     }
 
