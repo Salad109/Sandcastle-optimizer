@@ -19,13 +19,15 @@ public class Main {
         System.out.println(weightsCalculator);
 
         System.out.println(castleList.getFirst());
-        castleList.getFirst().addSand(50, bucketList.getFirst().angle);
+        castleList.getFirst().addLayer(50, bucketList.getFirst().angle);
         System.out.println(castleList.getFirst());
-        castleList.getFirst().addSand(50, bucketList.getFirst().angle);
+        castleList.getFirst().addLayer(50, bucketList.getFirst().angle);
         System.out.println(castleList.getFirst());
-        castleList.getFirst().addSand(15, bucketList.getFirst().angle);
+        castleList.getFirst().addLayer(15, bucketList.getFirst().angle);
         System.out.println(castleList.getFirst());
-        castleList.getFirst().addSand(15, bucketList.getFirst().angle);
+        castleList.getFirst().addLayer(15, bucketList.getFirst().angle);
         System.out.println(castleList.getFirst());
+
+        castleList.getFirst().printLayers();
     }
 }
