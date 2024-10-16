@@ -3,6 +3,7 @@ package jp.lab01.zlosnik;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
@@ -18,16 +19,26 @@ public class Main {
         System.out.println(bucketList);
         System.out.println(weightsCalculator);
 
-        for (Castle castle : castleList) {
-            building:
-            for (Bucket bucket : bucketList) {
-                double A = bucket.angle;
-                double step = 10;
-                for (double V = bucket.volume; V > 0; V -= step)
-                    if (castle.isComplete()) break building;
-                castle.addLayer(step, A);
-            }
-            System.out.println(castle);
+        int[] bucketIndexes = new int[bucketList.size()];
+        for (int i = 0; i < bucketList.size(); i++) {
+            bucketIndexes[i] = bucketList.get(i).number;
         }
+
+        List<List<Integer>> permutations = Permutations.getPermutations(bucketIndexes);
+        System.out.println(permutations);
+
+
+        Castle firstCastle = castleList.getFirst();
+        for (List<Integer> permutation : permutations) {
+            firstCastle.addLayerStack(bucketList, permutation);
+            firstCastle.printLayers();
+            System.out.println(firstCastle);
+            firstCastle.destroyCastle();
+        }
+        /*for (List<Integer> permutation : permutations) {
+            addLayerStack(bucketList, castleList.getFirst(), permutation);
+            castleList.getFirst().printLayers();
+            castleList.getFirst().destroyCastle();
+        }*/
     }
 }
