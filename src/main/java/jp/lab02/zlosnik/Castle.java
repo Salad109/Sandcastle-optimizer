@@ -5,7 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Castle {
-    private class Layer {
+    private static class Layer {
         double volume;
         double angle;
 
@@ -20,7 +20,7 @@ public class Castle {
         }
     }
 
-    private LinkedList<Layer> layers;
+    private final LinkedList<Layer> layers;
     public final int number;
     public final double initialRadius;
     private double baseRadius;
@@ -41,10 +41,10 @@ public class Castle {
         double tanTheta = Math.tan(Math.toRadians(layers.getLast().angle));
 
         double topBase = Math.cbrt((baseRadius * baseRadius * baseRadius) - ((12 * layers.getLast().volume) / (Math.PI * tanTheta)));
-        /*if (topBase < 0) {
-            throw new IllegalArgumentException("Top base must not be negative");
-        }*/
 
+        if (topBase < 0) {
+            throw new IllegalArgumentException("Top base must not be negative");
+        }
         this.height += 3 * layers.getLast().volume / (Math.PI * ((baseRadius * baseRadius) + (baseRadius * topBase) + (topBase * topBase)));
         this.volume += layers.getLast().volume;
         baseRadius = topBase;
@@ -63,10 +63,6 @@ public class Castle {
         for (int i = layers.size() - 1; i >= 0; i--) {
             System.out.println(j-- + ": " + layers.get(i).toString());
         }
-    }
-
-    public boolean isComplete() {
-        return baseRadius <= 0;
     }
 
     @Override
