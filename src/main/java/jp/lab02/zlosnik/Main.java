@@ -39,11 +39,13 @@ public class Main {
 
 
         faultyPermutationIndexes.sort(Collections.reverseOrder());
+        permutations.sort(Collections.reverseOrder()); // TODO XD
         for (int index : faultyPermutationIndexes) {
             if (index >= 0 && index < faultyPermutationIndexes.size()) {
                 permutations.remove(index);
             }
         }
+        permutations.sort(Collections.reverseOrder());
 
 
         System.out.println("==============================");
