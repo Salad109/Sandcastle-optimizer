@@ -18,6 +18,7 @@ public class Main {
         System.out.println(castleList);
         System.out.println(bucketList);
         System.out.println(weightsCalculator);
+        System.out.println("==============================");
 
         List<List<Integer>> permutations = Permutations.getPermutations(bucketList);
 
@@ -30,5 +31,11 @@ public class Main {
             System.out.println(firstCastle);
             firstCastle = firstCastle.destroyCastle();
         }
+        /*
+        Oblicz długość najdłuższej możliwej permutacji (volume wszystkich wiaderek / step)
+        Wylicz wszystkie permutacje do tej długości
+        Przeiteruj po nich wszystkich i zapisz najwyższą
+        */
+
     }
 }
