@@ -2,9 +2,7 @@ package jp.lab02.zlosnik;
 
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class Main {
     private final static double STEP = 5;
@@ -25,11 +23,29 @@ public class Main {
         System.out.println(weightsCalculator);
         System.out.println("==============================");
 
+
+        System.out.println(permutations.get(27));
+
+        Map<Integer, Integer> occurrences = countOccurrences(permutations.get(27));
+
+        for (Map.Entry<Integer, Integer> entry : occurrences.entrySet()) {
+            System.out.println("Number " + entry.getKey() + ": " + entry.getValue() + " times");
+        }
+
         System.out.println(permutations);
         System.out.println("Length: " + permutations.size());
 
-        Castle firstCastle = castleList.getFirst();
+        /*
+        Usuwanie wadliwych permutacji:
+        Pobierz ilość każdej z cyfr
+        if(ilość wystąpień cyfry x * STEP > volume wiaderka x)
+            dodaj indeks tej permutacji do listy wadliwych
 
+        przeiteruj po liście wadliwych usuwając pierw te z końca
+         */
+    }
+        /*
+        Castle firstCastle = castleList.getFirst();
 
         double maxHeight = 0;
         List<Castle.Layer> layers = new LinkedList<>();
@@ -45,6 +61,7 @@ public class Main {
         }
         System.out.println("Highest castle height: " + firstCastle.height);
         System.out.println("Highest castle layers: " + layers);
+        */
 
         /*
         Oblicz długość najdłuższej możliwej permutacji (volume wszystkich wiaderek / step)
@@ -52,5 +69,16 @@ public class Main {
         Przeiteruj po nich wszystkich i zapisz najwyższą
         */
 
+
+    private static Map<Integer, Integer> countOccurrences(List<Integer> numbers) {
+        Map<Integer, Integer> occurrences = new HashMap<>();
+
+        // Iterate through the list and count occurrences
+        for (Integer number : numbers) {
+            occurrences.put(number, occurrences.getOrDefault(number, 0) + 1);
+        }
+
+        return occurrences;
     }
+
 }

@@ -43,5 +43,4 @@ public abstract class Permutations {
             current.removeLast();  // Remove the last added element
         }
     }
-
 }
