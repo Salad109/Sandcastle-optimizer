@@ -1,4 +1,4 @@
-package jp.lab01.zlosnik;
+package jp.lab02.zlosnik;
 
 public class Bucket {
     public final int number;

@@ -1,4 +1,4 @@
-package jp.lab01.zlosnik;
+package jp.lab02.zlosnik;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -38,18 +38,16 @@ public class Castle {
 
     public void addLayer(double volume, double angle) {
         layers.add(new Layer(volume, angle));
-        angle = Math.toRadians(angle);
-        double tanTheta = Math.tan(angle);
+        double tanTheta = Math.tan(Math.toRadians(layers.getLast().angle));
 
-        double PI = Math.PI;
-        double topBase = Math.cbrt((baseRadius * baseRadius * baseRadius) - ((12 * volume) / (PI * tanTheta)));
+        double topBase = Math.cbrt((baseRadius * baseRadius * baseRadius) - ((12 * layers.getLast().volume) / (Math.PI * tanTheta)));
         /*if (topBase < 0) {
             throw new IllegalArgumentException("Top base must not be negative");
         }*/
-        height += 3 * volume / (PI * ((baseRadius * baseRadius) + (baseRadius * topBase) + (topBase * topBase)));
+
+        this.height += 3 * layers.getLast().volume / (Math.PI * ((baseRadius * baseRadius) + (baseRadius * topBase) + (topBase * topBase)));
+        this.volume += layers.getLast().volume;
         baseRadius = topBase;
-        this.volume += volume;
-        // this.volume = ((double) 1 / 3) * PI * height * ((initialRadius * initialRadius) + (initialRadius * topBase) + (topBase * topBase));
     }
 
     public void addLayerStack(ArrayList<Bucket> buckets, List<Integer> permutation) {
@@ -75,10 +73,8 @@ public class Castle {
     public String toString() {
         return String.format("Castle(Number: %d, Initial radius: %f, Current top radius: %f, Height: %f, Volume: %f, Layer count: %d)", number, initialRadius, baseRadius, height, volume, layers.size());
     }
-    public void destroyCastle(){
-        layers.clear();
-        height = 0;
-        baseRadius = 0;
-        volume = 0;
+
+    public Castle destroyCastle() {
+        return new Castle(number, initialRadius);
     }
 }

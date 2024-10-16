@@ -1,4 +1,4 @@
-package jp.lab01.zlosnik;
+package jp.lab02.zlosnik;
 
 public class WeightsCalculator {
     public final double w1, w2;
