@@ -23,9 +23,8 @@ public class Main {
         System.out.println(weightsCalculator);
 
         System.out.println("==============================");
-        System.out.println(permutations);
+        System.out.println("Permutations: " + permutations);
         System.out.println("Length: " + permutations.size());
-        System.out.println("==============================");
 
         List<Integer> faultyPermutationIndexes = new LinkedList<>();
         Map<Integer, Integer> occurrences;
@@ -33,12 +32,12 @@ public class Main {
         for (int i = 0; i < permutations.size(); i++) {
             occurrences = countOccurrences(permutations.get(i));
             for (Map.Entry<Integer, Integer> entry : occurrences.entrySet()) {
-                System.out.println("Number " + entry.getKey() + ": " + entry.getValue() + " times");
-                if (entry.getValue() * STEP > bucketList.get(entry.getKey() - 1).volume) {
+                if (entry.getValue() * STEP > bucketList.get(entry.getKey() - 1).volume)
                     faultyPermutationIndexes.add(i);
-                }
             }
         }
+
+
         faultyPermutationIndexes.sort(Collections.reverseOrder());
         for (int index : faultyPermutationIndexes) {
             if (index >= 0 && index < faultyPermutationIndexes.size()) {
@@ -48,20 +47,10 @@ public class Main {
 
 
         System.out.println("==============================");
-        System.out.println("Faulty Permutations: " + faultyPermutationIndexes);
-        System.out.println(permutations);
+        System.out.println("Faulty Permutation Indexes: " + faultyPermutationIndexes);
+        System.out.println("Faulty permutations: " + permutations);
         System.out.println("Length: " + permutations.size());
 
-        /*
-        Usuwanie wadliwych permutacji:
-        Pobierz ilość każdej z cyfr
-        if(ilość wystąpień cyfry x * STEP > volume wiaderka x)
-            dodaj indeks tej permutacji do listy wadliwych
-
-        przeiteruj po liście wadliwych usuwając pierw te z końca
-         */
-    }
-        /*
         Castle firstCastle = castleList.getFirst();
 
         double maxHeight = 0;
@@ -78,14 +67,10 @@ public class Main {
         }
         System.out.println("Highest castle height: " + firstCastle.height);
         System.out.println("Highest castle layers: " + layers);
-        */
 
-        /*
-        Oblicz długość najdłuższej możliwej permutacji (volume wszystkich wiaderek / step)
-        Wylicz wszystkie permutacje do tej długości
-        Przeiteruj po nich wszystkich i zapisz najwyższą
-        */
 
+        System.out.println(permutations.getLast());
+    }
 
     private static Map<Integer, Integer> countOccurrences(List<Integer> numbers) {
         Map<Integer, Integer> occurrences = new HashMap<>();
