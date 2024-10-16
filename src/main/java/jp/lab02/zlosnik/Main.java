@@ -21,17 +21,34 @@ public class Main {
         System.out.println(castleList);
         System.out.println(bucketList);
         System.out.println(weightsCalculator);
+
+        System.out.println("==============================");
+        System.out.println(permutations);
+        System.out.println("Length: " + permutations.size());
         System.out.println("==============================");
 
+        List<Integer> faultyPermutationIndexes = new LinkedList<>();
+        Map<Integer, Integer> occurrences;
 
-        System.out.println(permutations.get(27));
-
-        Map<Integer, Integer> occurrences = countOccurrences(permutations.get(27));
-
-        for (Map.Entry<Integer, Integer> entry : occurrences.entrySet()) {
-            System.out.println("Number " + entry.getKey() + ": " + entry.getValue() + " times");
+        for (int i = 0; i < permutations.size(); i++) {
+            occurrences = countOccurrences(permutations.get(i));
+            for (Map.Entry<Integer, Integer> entry : occurrences.entrySet()) {
+                System.out.println("Number " + entry.getKey() + ": " + entry.getValue() + " times");
+                if (entry.getValue() * STEP > bucketList.get(entry.getKey() - 1).volume) {
+                    faultyPermutationIndexes.add(i);
+                }
+            }
+        }
+        faultyPermutationIndexes.sort(Collections.reverseOrder());
+        for (int index : faultyPermutationIndexes) {
+            if (index >= 0 && index < faultyPermutationIndexes.size()) {
+                permutations.remove(index);
+            }
         }
 
+
+        System.out.println("==============================");
+        System.out.println("Faulty Permutations: " + faultyPermutationIndexes);
         System.out.println(permutations);
         System.out.println("Length: " + permutations.size());
 
