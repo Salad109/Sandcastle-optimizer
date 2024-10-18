@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public abstract class Permutations {
+public abstract class PermutationBuilder {
 
     // Main entry point: returns the valid permutations for given bucketList and STEP
     public static List<List<Integer>> getPermutations(List<Bucket> bucketList, double STEP) {
@@ -88,5 +88,15 @@ public abstract class Permutations {
             occurrences.put(number, occurrences.getOrDefault(number, 0) + 1);
         }
         return occurrences;
+    }
+
+    public static List<List<Integer>> getCompletePermutations(List<List<Integer>> permutations, Castle castle, ArrayList<Bucket> bucketList, double STEP) {
+        List<List<Integer>> completePermutations = new ArrayList<>();
+        for (List<Integer> permutation : permutations) {
+            castle = castle.getBlankCastle();
+            castle.addLayerStack(bucketList, permutation, STEP);
+            if (castle.complete) completePermutations.add(permutation);
+        }
+        return completePermutations;
     }
 }
