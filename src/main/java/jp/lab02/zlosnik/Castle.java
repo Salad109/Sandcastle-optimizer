@@ -6,17 +6,23 @@ import java.util.List;
 
 public class Castle {
     public static class Layer {
-        double volume;
-        double angle;
+        final double volume;
+        final double angle;
+        final double height;
+        final double bottomWidth;
+        final double topWidth;
 
-        Layer(double volume, double angle) {
+        Layer(double volume, double angle, double height, double bottomWidth, double topWidth) {
             this.volume = volume;
             this.angle = angle;
+            this.height = height;
+            this.bottomWidth = bottomWidth;
+            this.topWidth = topWidth;
         }
 
         @Override
         public String toString() {
-            return String.format("Layer(volume=%f, angle=%f)", volume, angle);
+            return String.format("Layer(volume=%f, angle=%f, height=%f, bottom width=%f, top width=%f)", volume, angle, height, bottomWidth, topWidth);
         }
     }
 
@@ -26,6 +32,7 @@ public class Castle {
     public double baseRadius;
     public double height;
     public double volume;
+    public boolean complete;
 
     Castle(int number, double radius) {
         this.number = number;
@@ -34,23 +41,36 @@ public class Castle {
         height = 0;
         volume = 0;
         layers = new LinkedList<>();
+        complete = false;
     }
 
     public void addLayer(double volume, double angle) {
-        layers.add(new Layer(volume, angle));
-        double tanTheta = Math.tan(Math.toRadians(layers.getLast().angle));
+        if (!complete) {
+            double tanTheta = Math.tan(Math.toRadians(angle));
+            double height;
 
-        double topBase = Math.cbrt((baseRadius * baseRadius * baseRadius) - ((12 * layers.getLast().volume) / (Math.PI * tanTheta)));
-
-        this.height += 3 * layers.getLast().volume / (Math.PI * ((baseRadius * baseRadius) + (baseRadius * topBase) + (topBase * topBase)));
-        this.volume += layers.getLast().volume;
-        baseRadius = topBase;
+            double topBase = Math.cbrt((baseRadius * baseRadius * baseRadius) - ((12 * volume) / (Math.PI * tanTheta)));
+            if (topBase < 0) { // Layer cannot fit fully. Making a triangle.
+                complete = true;
+                height = baseRadius * tanTheta;
+                this.height += height;
+                this.volume += baseRadius * height;
+                layers.add(new Layer(baseRadius * height, angle, height, baseRadius, 0));
+                baseRadius = 0;
+            } else { // Adding full layer.
+                height = 3 * volume / (Math.PI * ((baseRadius * baseRadius) + (baseRadius * topBase) + (topBase * topBase)));
+                this.height += height;
+                this.volume += volume;
+                layers.add(new Layer(baseRadius * height, angle, height, baseRadius, topBase));
+                baseRadius = topBase;
+            }
+        }
     }
 
-    public void addLayerStack(ArrayList<Bucket> buckets, List<Integer> permutation) {
+    public void addLayerStack(ArrayList<Bucket> buckets, List<Integer> permutation, double STEP) {
         for (Integer i : permutation) {
             Bucket bucket = buckets.get(i - 1);
-            addLayer(bucket.volume, bucket.angle);
+            addLayer(STEP, bucket.angle);
         }
     }
 
@@ -64,10 +84,11 @@ public class Castle {
 
     @Override
     public String toString() {
-        return String.format("Castle(Number: %d, Initial radius: %f, Current top radius: %f, Height: %f, Volume: %f, Layer count: %d)", number, initialRadius, baseRadius, height, volume, layers.size());
+        return String.format("Castle(Number: %d, Initial radius: %f, Current top radius: %f, Height: %f, Volume: %f, Layer count: %d, Complete: %b)",
+                number, initialRadius, baseRadius, height, volume, layers.size(), complete);
     }
 
-    public Castle destroyCastle() {
+    public Castle getBlankCastle() {
         return new Castle(number, initialRadius);
     }
 }

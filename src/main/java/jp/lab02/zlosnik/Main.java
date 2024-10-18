@@ -9,9 +9,9 @@ public class Main {
 
     public static void main(String[] args) {
 
-        File castlesFile = new File("/home/mat/Desktop/Sandcastle/src/main/java/jp/lab02/zlosnik/miejsca.txt");
-        File bucketsFile = new File("/home/mat/Desktop/Sandcastle/src/main/java/jp/lab02/zlosnik/wiaderka.txt");
-        File weightsFile = new File("/home/mat/Desktop/Sandcastle/src/main/java/jp/lab02/zlosnik/wagi.txt");
+        File castlesFile = new File("src/main/java/jp/lab02/zlosnik/miejsca.txt");
+        File bucketsFile = new File("src/main/java/jp/lab02/zlosnik/wiaderka.txt");
+        File weightsFile = new File("src/main/java/jp/lab02/zlosnik/wagi.txt");
 
         ArrayList<Castle> castleList = DataReader.getCastles(castlesFile);
         ArrayList<Bucket> bucketList = DataReader.getBuckets(bucketsFile);
@@ -23,37 +23,24 @@ public class Main {
         System.out.println(weightsCalculator);
 
         System.out.println("==============================");
+        System.out.println("Permutations length: " + permutations.size());
         System.out.println("Permutations: " + permutations);
-        System.out.println("Length: " + permutations.size());
+        System.out.println("==============================");
 
-        List<Integer> faultyPermutationIndexes = new LinkedList<>();
-        Map<Integer, Integer> occurrences;
+        Castle castle = castleList.getFirst().getBlankCastle();
+        castle.addLayerStack(bucketList, permutations.getLast(), STEP);
+        castle.printLayers();
+        System.out.println(castle);
 
-        for (int i = 0; i < permutations.size(); i++) {
-            occurrences = countOccurrences(permutations.get(i));
-            for (Map.Entry<Integer, Integer> entry : occurrences.entrySet()) {
-                if (entry.getValue() * STEP > bucketList.get(entry.getKey() - 1).volume)
-                    faultyPermutationIndexes.add(i);
-            }
-        }
-
-
-        faultyPermutationIndexes.sort(Collections.reverseOrder());
-        permutations.sort(Collections.reverseOrder()); // TODO XD
-        for (int index : faultyPermutationIndexes) {
-            if (index >= 0 && index < faultyPermutationIndexes.size()) {
-                permutations.remove(index);
-            }
-        }
-        permutations.sort(Collections.reverseOrder());
-
+        permutations = getCompletePermutations(permutations, castleList.getFirst(), bucketList);
 
         System.out.println("==============================");
-        System.out.println("Faulty Permutation Indexes: " + faultyPermutationIndexes);
-        System.out.println("Faulty permutations: " + permutations);
-        System.out.println("Length: " + permutations.size());
+        System.out.println("Complete permutations length: " + permutations.size());
+        System.out.println("Complete permutations: " + permutations);
+        System.out.println("==============================");
 
-        Castle firstCastle = castleList.getFirst();
+
+        /*
 
         double maxHeight = 0;
         List<Castle.Layer> layers = new LinkedList<>();
@@ -72,17 +59,16 @@ public class Main {
 
 
         System.out.println(permutations.getLast());
+        */
     }
-
-    private static Map<Integer, Integer> countOccurrences(List<Integer> numbers) {
-        Map<Integer, Integer> occurrences = new HashMap<>();
-
-        // Iterate through the list and count occurrences
-        for (Integer number : numbers) {
-            occurrences.put(number, occurrences.getOrDefault(number, 0) + 1);
+    private static List<List<Integer>> getCompletePermutations(List<List<Integer>> permutations, Castle castle, ArrayList<Bucket> bucketList) {
+        List<List<Integer>> completePermutations = new ArrayList<>();
+        for(List<Integer> permutation : permutations) {
+            castle = castle.getBlankCastle();
+            castle.addLayerStack(bucketList, permutation, STEP);
+            if(castle.complete)
+                completePermutations.add(permutation);
         }
-
-        return occurrences;
+        return completePermutations;
     }
-
 }
