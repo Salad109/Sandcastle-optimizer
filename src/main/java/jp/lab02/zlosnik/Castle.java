@@ -51,22 +51,21 @@ public class Castle {
             double height;
             final double PI = Math.PI;
 
-            double topBase = Math.cbrt((baseRadius * baseRadius * baseRadius) - ((12 * volume) / (PI * tanTheta)));
-            System.out.println("TOP BASE: " + topBase);
+            double topRadius = Math.cbrt((baseRadius * baseRadius * baseRadius) - ((12 * volume) / (PI * tanTheta)));
 
-            if (topBase < 0) { // Layer cannot fit fully. Making a triangle.
+            if (topRadius < 0) { // Layer cannot fit fully. Making a triangle.
                 complete = true;
-                height = baseRadius * tanTheta;
+                height = 3 * volume / (PI * (baseRadius * baseRadius));
                 this.height += height;
                 this.volume += (PI * baseRadius * baseRadius * height) / 3;
                 layers.add(new Layer((PI * baseRadius * baseRadius * height) / 3, angle, height, baseRadius, 0));
                 baseRadius = 0;
             } else { // Adding full layer.
-                height = 3 * volume / (PI * ((baseRadius * baseRadius) + (baseRadius * topBase) + (topBase * topBase)));
+                height = 3 * volume / (PI * ((baseRadius * baseRadius) + (baseRadius * topRadius) + (topRadius * topRadius)));
                 this.height += height;
                 this.volume += volume;
-                layers.add(new Layer(volume, angle, height, baseRadius, topBase));
-                baseRadius = topBase;
+                layers.add(new Layer(volume, angle, height, baseRadius, topRadius));
+                baseRadius = topRadius;
             }
         }
     }

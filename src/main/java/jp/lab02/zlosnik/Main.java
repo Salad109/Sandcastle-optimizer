@@ -5,7 +5,7 @@ import java.io.File;
 import java.util.*;
 
 public class Main {
-    private final static double STEP = 5;
+    private final static double STEP = 4;
 
     public static void main(String[] args) {
 
@@ -21,23 +21,24 @@ public class Main {
         System.out.println(castleList);
         System.out.println(bucketList);
         System.out.println(weightsCalculator);
-
         System.out.println("==============================");
+
         System.out.println("Permutations length: " + permutations.size());
         System.out.println("Permutations: " + permutations);
         System.out.println("==============================");
 
-        Castle castle = castleList.getFirst().getBlankCastle();
-        castle.addLayerStack(bucketList, permutations.getLast(), STEP);
-        castle.printLayers();
-        System.out.println(castle);
 
-        /*permutations = getCompletePermutations(permutations, castleList.getFirst(), bucketList);
+        permutations = getCompletePermutations(permutations, castleList.getFirst(), bucketList);
 
-        System.out.println("==============================");
         System.out.println("Complete permutations length: " + permutations.size());
         System.out.println("Complete permutations: " + permutations);
-        System.out.println("==============================");*/
+        System.out.println("==============================");
+
+
+        Castle castle = castleList.getFirst().getBlankCastle();
+        castle.addLayerStack(bucketList, permutations.get(4), STEP);
+        castle.printLayers();
+        System.out.println(castle);
 
     }
     private static List<List<Integer>> getCompletePermutations(List<List<Integer>> permutations, Castle castle, ArrayList<Bucket> bucketList) {
