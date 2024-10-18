@@ -32,12 +32,12 @@ public class Main {
         castle.printLayers();
         System.out.println(castle);
 
-        permutations = getCompletePermutations(permutations, castleList.getFirst(), bucketList);
+        /*permutations = getCompletePermutations(permutations, castleList.getFirst(), bucketList);
 
         System.out.println("==============================");
         System.out.println("Complete permutations length: " + permutations.size());
         System.out.println("Complete permutations: " + permutations);
-        System.out.println("==============================");
+        System.out.println("==============================");*/
 
     }
     private static List<List<Integer>> getCompletePermutations(List<List<Integer>> permutations, Castle castle, ArrayList<Bucket> bucketList) {

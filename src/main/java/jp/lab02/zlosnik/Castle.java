@@ -22,7 +22,8 @@ public class Castle {
 
         @Override
         public String toString() {
-            return String.format("Layer(volume=%f, angle=%f, height=%f, bottom width=%f, top width=%f)", volume, angle, height, bottomWidth, topWidth);
+            return String.format("Layer(volume=%f, angle=%f, height=%f, bottom width=%f, top width=%f)",
+                    volume, angle, height, bottomWidth, topWidth);
         }
     }
 
@@ -48,17 +49,20 @@ public class Castle {
         if (!complete) {
             double tanTheta = Math.tan(Math.toRadians(angle));
             double height;
+            final double PI = Math.PI;
 
-            double topBase = Math.cbrt((baseRadius * baseRadius * baseRadius) - ((12 * volume) / (Math.PI * tanTheta)));
+            double topBase = Math.cbrt((baseRadius * baseRadius * baseRadius) - ((12 * volume) / (PI * tanTheta)));
+            System.out.println("TOP BASE: " + topBase);
+
             if (topBase < 0) { // Layer cannot fit fully. Making a triangle.
                 complete = true;
                 height = baseRadius * tanTheta;
                 this.height += height;
-                this.volume += (Math.PI * baseRadius * baseRadius * height) / 3;
-                layers.add(new Layer((Math.PI * baseRadius * baseRadius * height) / 3, angle, height, baseRadius, 0));
+                this.volume += (PI * baseRadius * baseRadius * height) / 3;
+                layers.add(new Layer((PI * baseRadius * baseRadius * height) / 3, angle, height, baseRadius, 0));
                 baseRadius = 0;
             } else { // Adding full layer.
-                height = 3 * volume / (Math.PI * ((baseRadius * baseRadius) + (baseRadius * topBase) + (topBase * topBase)));
+                height = 3 * volume / (PI * ((baseRadius * baseRadius) + (baseRadius * topBase) + (topBase * topBase)));
                 this.height += height;
                 this.volume += volume;
                 layers.add(new Layer(volume, angle, height, baseRadius, topBase));
