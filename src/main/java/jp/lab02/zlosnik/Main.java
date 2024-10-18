@@ -23,31 +23,29 @@ public class Main {
         System.out.println(weightsCalculator);
         System.out.println("==============================");
 
-        System.out.println("Permutations length: " + permutations.size());
-        System.out.println("Permutations: " + permutations);
+        System.out.println("Total possible permutations length: " + permutations.size());
+        System.out.println("Total possible permutations: " + permutations);
         System.out.println("==============================");
 
-
-        permutations = getCompletePermutations(permutations, castleList.getFirst(), bucketList);
-
-        System.out.println("Complete permutations length: " + permutations.size());
-        System.out.println("Complete permutations: " + permutations);
-        System.out.println("==============================");
-
-
-        Castle castle = castleList.getFirst().getBlankCastle();
-        castle.addLayerStack(bucketList, permutations.get(4), STEP);
-        castle.printLayers();
-        System.out.println(castle);
-
+        List<List<List<Integer>>> permutationsList = new ArrayList<>(2);
+        for (int i = 0; i < castleList.size(); i++) {
+            permutationsList.add(getCompletePermutations(permutations, castleList.get(i), bucketList));
+            System.out.println("Complete permutations length for castle " + castleList.get(i).number + ": " + permutationsList.get(i).size());
+            System.out.println("Complete permutations for castle " + castleList.get(i).number + ": " + permutationsList.get(i));
+            System.out.println("==============================");
+        }
+        if (permutationsList.get(0).equals(permutationsList.get(1)))
+            System.out.println("Permutations are equal");
+        else
+            System.out.println("Permutations are not equal");
     }
+
     private static List<List<Integer>> getCompletePermutations(List<List<Integer>> permutations, Castle castle, ArrayList<Bucket> bucketList) {
         List<List<Integer>> completePermutations = new ArrayList<>();
-        for(List<Integer> permutation : permutations) {
+        for (List<Integer> permutation : permutations) {
             castle = castle.getBlankCastle();
             castle.addLayerStack(bucketList, permutation, STEP);
-            if(castle.complete)
-                completePermutations.add(permutation);
+            if (castle.complete) completePermutations.add(permutation);
         }
         return completePermutations;
     }

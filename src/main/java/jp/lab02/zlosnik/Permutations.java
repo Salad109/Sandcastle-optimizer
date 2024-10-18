@@ -59,9 +59,18 @@ public abstract class Permutations {
             Map<Integer, Integer> occurrences = countOccurrences(permutation);
 
             // Check if the current permutation is valid
-            boolean isValid = occurrences.entrySet().stream().allMatch(entry ->
-                    entry.getValue() * STEP <= bucketList.get(entry.getKey() - 1).volume
-            );
+            boolean isValid = true; // Assume valid unless proven otherwise
+
+            for (Map.Entry<Integer, Integer> entry : occurrences.entrySet()) {
+                int key = entry.getKey();
+                int count = entry.getValue();
+
+                // Check the validity condition
+                if (count * STEP > bucketList.get(key - 1).volume) {
+                    isValid = false; // Set isValid to false if condition fails
+                    break; // No need to check further
+                }
+            }
 
             if (isValid) {
                 validPermutations.add(permutation);
@@ -70,6 +79,7 @@ public abstract class Permutations {
 
         return validPermutations;
     }
+
 
     // Counts the occurrences of each number in the given list
     private static Map<Integer, Integer> countOccurrences(List<Integer> numbers) {
