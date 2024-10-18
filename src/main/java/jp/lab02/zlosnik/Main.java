@@ -39,27 +39,6 @@ public class Main {
         System.out.println("Complete permutations: " + permutations);
         System.out.println("==============================");
 
-
-        /*
-
-        double maxHeight = 0;
-        List<Castle.Layer> layers = new LinkedList<>();
-        for (List<Integer> permutation : permutations) {
-            System.out.println("Now building permutation: " + permutation);
-            firstCastle.addLayerStack(bucketList, permutation);
-            if (firstCastle.baseRadius < 0) continue; // Ignore impossible towers
-            if (firstCastle.height > maxHeight) {
-                maxHeight = firstCastle.height;
-                layers = firstCastle.layers;
-            }
-            firstCastle = firstCastle.destroyCastle();
-        }
-        System.out.println("Highest castle height: " + firstCastle.height);
-        System.out.println("Highest castle layers: " + layers);
-
-
-        System.out.println(permutations.getLast());
-        */
     }
     private static List<List<Integer>> getCompletePermutations(List<List<Integer>> permutations, Castle castle, ArrayList<Bucket> bucketList) {
         List<List<Integer>> completePermutations = new ArrayList<>();

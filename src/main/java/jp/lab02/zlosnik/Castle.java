@@ -54,14 +54,14 @@ public class Castle {
                 complete = true;
                 height = baseRadius * tanTheta;
                 this.height += height;
-                this.volume += baseRadius * height;
-                layers.add(new Layer(baseRadius * height, angle, height, baseRadius, 0));
+                this.volume += (Math.PI * baseRadius * baseRadius * height) / 3;
+                layers.add(new Layer((Math.PI * baseRadius * baseRadius * height) / 3, angle, height, baseRadius, 0));
                 baseRadius = 0;
             } else { // Adding full layer.
                 height = 3 * volume / (Math.PI * ((baseRadius * baseRadius) + (baseRadius * topBase) + (topBase * topBase)));
                 this.height += height;
                 this.volume += volume;
-                layers.add(new Layer(baseRadius * height, angle, height, baseRadius, topBase));
+                layers.add(new Layer(volume, angle, height, baseRadius, topBase));
                 baseRadius = topBase;
             }
         }
