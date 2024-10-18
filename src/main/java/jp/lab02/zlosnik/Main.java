@@ -31,5 +31,13 @@ public class Main {
             System.out.println("==============================");
         }
 
+        List<List<List<Integer>>> permutationCombinations;
+        /* A,B,C... = castles   1, 2... = permutations
+        A1 A2...
+        B1 B2 B3...
+        C1 C2...
+        ...
+        A1B1C1 A1B1C2 A1B2C1 A1B2C2 A1B3C1 A1B3C2 A2B1C1 A2B1C2 A2B2C1 A2B2C2 A2B3C1 A2B3C2
+         */
     }
 }
