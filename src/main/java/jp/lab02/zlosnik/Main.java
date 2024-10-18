@@ -5,7 +5,7 @@ import java.io.File;
 import java.util.*;
 
 public class Main {
-    private final static double STEP = 2.75;
+    private final static double STEP = 4;
 
     public static void main(String[] args) {
         File castlesFile = new File("src/main/java/jp/lab02/zlosnik/miejsca.txt");
@@ -25,16 +25,11 @@ public class Main {
         System.out.println("Total possible permutations length: " + permutations.size());
         System.out.println("==============================");
 
-        List<List<List<Integer>>> permutationsList = new ArrayList<>(2);
-        for (int i = 0; i < castleList.size(); i++) {
-            permutationsList.add(PermutationBuilder.getCompletePermutations(permutations, castleList.get(i), bucketList, STEP));
-            System.out.println("Complete permutations length for castle " + castleList.get(i).number + ": " + permutationsList.get(i).size());
+        for (Castle castle : castleList) {
+            castle.possiblePermutationsList = PermutationBuilder.getCompletePermutations(permutations, castle, bucketList, STEP);
+            System.out.println("Complete permutations length for castle " + castle.number + ": " + castle.possiblePermutationsList.size());
             System.out.println("==============================");
         }
 
-        castleList.getFirst().addLayerStack(bucketList, permutationsList.getFirst().get(4), STEP);
-        castleList.getFirst().printLayers();
-        System.out.println(castleList.getFirst());
     }
-
 }
