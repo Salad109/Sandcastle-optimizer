@@ -1,25 +1,23 @@
 package jp.lab02.zlosnik;
 
 
-import jp.lab02.zlosnik.logic.DataReader;
-import jp.lab02.zlosnik.logic.PermutationBuilder;
-import jp.lab02.zlosnik.logic.WeightsCalculator;
+import jp.lab02.zlosnik.logic.*;
 
-import java.io.File;
 import java.util.*;
 
 public class Main {
-    private final static double STEP = 4;
+    private static final double STEP = 5;
 
     public static void main(String[] args) {
-        File castlesFile = new File("src/main/java/jp/lab02/zlosnik/data/miejsca.txt");
-        File bucketsFile = new File("src/main/java/jp/lab02/zlosnik/data/wiaderka.txt");
-        File weightsFile = new File("src/main/java/jp/lab02/zlosnik/data/wagi.txt");
+        DataReader dataReader = new DataReader();
+        dataReader.setCastlesPath("src/main/java/jp/lab02/zlosnik/data/miejsca.txt");
+        dataReader.setBucketsPath("src/main/java/jp/lab02/zlosnik/data/wiaderka.txt");
+        dataReader.setWeightsPath("src/main/java/jp/lab02/zlosnik/data/wagi.txt");
 
-        ArrayList<Castle> castleList = DataReader.getCastles(castlesFile);
-        ArrayList<Bucket> bucketList = DataReader.getBuckets(bucketsFile);
+        List<Castle> castleList = dataReader.getCastles();
+        List<Bucket> bucketList = dataReader.getBuckets();
         List<List<Integer>> permutations = PermutationBuilder.getPermutations(bucketList, STEP);
-        WeightsCalculator weightsCalculator = DataReader.getWeights(weightsFile);
+        WeightsCalculator weightsCalculator = dataReader.getWeights();
 
         System.out.println(castleList);
         System.out.println(bucketList);
@@ -43,17 +41,14 @@ public class Main {
         ...
         A1B1C1 A1B1C2 A1B2C1 A1B2C2 A1B3C1 A1B3C2 A2B1C1 A2B1C2 A2B2C1 A2B2C2 A2B3C1 A2B3C2
          */
-        System.out.println(castleList.getFirst().possiblePermutationsList);
-        ArrayList<Bucket> newBucketList = getOriginalBucketList(bucketList);
-        System.out.println(bucketList);
-        System.out.println(newBucketList);
-    }
-
-    private static ArrayList<Bucket> getOriginalBucketList(ArrayList<Bucket> originalBucketList) {
-        ArrayList<Bucket> newBucketList = new ArrayList<>();
-        for (Bucket bucket : originalBucketList) {
-            newBucketList.add(bucket.clone());
+        Castle firstCastle = castleList.getFirst();
+        for (List<Integer> permutation : firstCastle.possiblePermutationsList) {
+            List<Bucket> newBucketList = dataReader.getBuckets(); // Get fresh bucket list
+            System.out.println("Buckets before:\t" + newBucketList);
+            System.out.println(permutation);
+            System.out.println(PermutationBuilder.countOccurrences(permutation));
+            System.out.println("Buckets after:\t" + newBucketList);
+            System.out.println("==============================");
         }
-        return newBucketList;
     }
 }

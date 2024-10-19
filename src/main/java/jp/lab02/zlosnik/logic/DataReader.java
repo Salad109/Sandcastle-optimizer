@@ -6,10 +6,27 @@ import jp.lab02.zlosnik.Castle;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
-public abstract class DataReader {
-    public static ArrayList<Castle> getCastles(File castlesFile) {
+public class DataReader {
+    File castlesFile;
+    File bucketsFile;
+    File weightsFile;
+    
+    public void setCastlesPath(String castlesPathname) {
+        castlesFile = new File(castlesPathname);
+    }
+
+    public void setBucketsPath(String bucketsPathname) {
+        bucketsFile = new File(bucketsPathname);
+    }
+
+    public void setWeightsPath(String weightsPathname) {
+        weightsFile = new File(weightsPathname);
+    }
+
+    public List<Castle> getCastles() {
         ArrayList<Castle> castleList = new ArrayList<>();
         Scanner castleScanner;
         try {
@@ -30,7 +47,7 @@ public abstract class DataReader {
         return castleList;
     }
 
-    public static ArrayList<Bucket> getBuckets(File bucketsFile) {
+    public List<Bucket> getBuckets() {
         ArrayList<Bucket> bucketList = new ArrayList<>();
         Scanner bucketScanner;
         try {
@@ -40,7 +57,8 @@ public abstract class DataReader {
         }
 
         int bucketNumber;
-        double angle, volume;
+        double angle;
+        double volume;
         bucketScanner.nextLine();
         while (bucketScanner.hasNextLine()) {
             String[] parts = bucketScanner.nextLine().split(", ");
@@ -52,7 +70,7 @@ public abstract class DataReader {
         return bucketList;
     }
 
-    public static WeightsCalculator getWeights(File weightsFile) {
+    public WeightsCalculator getWeights() {
         Scanner weightsScanner;
         try {
             weightsScanner = new Scanner(weightsFile);

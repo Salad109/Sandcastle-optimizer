@@ -85,15 +85,15 @@ public abstract class PermutationBuilder {
 
 
     // Counts the occurrences of each number in the given list
-    private static Map<Integer, Integer> countOccurrences(List<Integer> numbers) {
+    public static Map<Integer, Integer> countOccurrences(List<Integer> permutation) {
         Map<Integer, Integer> occurrences = new HashMap<>();
-        for (Integer number : numbers) {
+        for (Integer number : permutation) {
             occurrences.put(number, occurrences.getOrDefault(number, 0) + 1);
         }
         return occurrences;
     }
 
-    public static List<List<Integer>> getCompletePermutations(List<List<Integer>> permutations, Castle castle, ArrayList<Bucket> bucketList, double STEP) {
+    public static List<List<Integer>> getCompletePermutations(List<List<Integer>> permutations, Castle castle, List<Bucket> bucketList, double STEP) {
         List<List<Integer>> completePermutations = new ArrayList<>();
         for (List<Integer> permutation : permutations) {
             castle = castle.getBlankCastle();

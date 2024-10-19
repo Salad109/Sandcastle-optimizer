@@ -2,7 +2,8 @@ package jp.lab02.zlosnik;
 
 public class Bucket implements Cloneable {
     public final int number;
-    public final double angle, volume;
+    public final double angle;
+    public final double volume;
 
     public Bucket(int number, double angle, double volume) {
         this.number = number;

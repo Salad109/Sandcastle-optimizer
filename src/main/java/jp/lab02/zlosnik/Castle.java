@@ -1,6 +1,5 @@
 package jp.lab02.zlosnik;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -27,7 +26,7 @@ public class Castle {
         }
     }
 
-    public final LinkedList<Layer> layers;
+    public final List<Layer> layers;
     public final int number;
     public final double initialRadius;
     public double baseRadius;
@@ -49,29 +48,29 @@ public class Castle {
     public void addLayer(double volume, double angle) {
         if (!complete) {
             double tanTheta = Math.tan(Math.toRadians(angle));
-            double height;
+            double layerHeight;
             final double PI = Math.PI;
 
             double topRadius = Math.cbrt((baseRadius * baseRadius * baseRadius) - ((12 * volume) / (PI * tanTheta)));
 
             if (topRadius < 0) { // Layer cannot fit fully. Making a triangle.
                 complete = true;
-                height = 3 * volume / (PI * (baseRadius * baseRadius));
-                this.height += height;
-                this.volume += (PI * baseRadius * baseRadius * height) / 3;
-                layers.add(new Layer((PI * baseRadius * baseRadius * height) / 3, angle, height, baseRadius, 0));
+                layerHeight = 3 * volume / (PI * (baseRadius * baseRadius));
+                this.height += layerHeight;
+                this.volume += (PI * baseRadius * baseRadius * layerHeight) / 3;
+                layers.add(new Layer((PI * baseRadius * baseRadius * layerHeight) / 3, angle, layerHeight, baseRadius, 0));
                 baseRadius = 0;
             } else { // Adding full layer.
-                height = 3 * volume / (PI * ((baseRadius * baseRadius) + (baseRadius * topRadius) + (topRadius * topRadius)));
-                this.height += height;
+                layerHeight = 3 * volume / (PI * ((baseRadius * baseRadius) + (baseRadius * topRadius) + (topRadius * topRadius)));
+                this.height += layerHeight;
                 this.volume += volume;
-                layers.add(new Layer(volume, angle, height, baseRadius, topRadius));
+                layers.add(new Layer(volume, angle, layerHeight, baseRadius, topRadius));
                 baseRadius = topRadius;
             }
         }
     }
 
-    public void addLayerStack(ArrayList<Bucket> buckets, List<Integer> permutation, double STEP) {
+    public void addLayerStack(List<Bucket> buckets, List<Integer> permutation, double STEP) {
         for (Integer i : permutation) {
             Bucket bucket = buckets.get(i - 1);
             addLayer(STEP, bucket.angle);
@@ -79,7 +78,7 @@ public class Castle {
     }
 
     public void printLayers() {
-        System.out.printf("Layers of castle %d, top to bottom:\n", number);
+        System.out.printf("Layers of castle %d, top to bottom:%n", number);
         int j = layers.size() - 1;
         for (int i = layers.size() - 1; i >= 0; i--) {
             System.out.println(j-- + ": " + layers.get(i).toString());

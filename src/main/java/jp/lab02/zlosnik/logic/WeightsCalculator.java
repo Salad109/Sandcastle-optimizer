@@ -1,7 +1,8 @@
 package jp.lab02.zlosnik.logic;
 
 public class WeightsCalculator {
-    public final double w1, w2;
+    public final double w1;
+    public final double w2;
 
     public WeightsCalculator(double w1, double w2) {
         this.w1 = w1;
