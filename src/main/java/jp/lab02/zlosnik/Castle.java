@@ -21,17 +21,16 @@ public class Castle {
 
         @Override
         public String toString() {
-            return String.format("Layer(volume=%f, angle=%f, height=%f, bottom width=%f, top width=%f)",
-                    volume, angle, height, bottomWidth, topWidth);
+            return String.format("Layer(volume=%f, angle=%f, height=%f, bottom width=%f, top width=%f)", volume, angle, height, bottomWidth, topWidth);
         }
     }
 
-    public final List<Layer> layers;
+    private final List<Layer> layers;
     public final int number;
-    public final double initialRadius;
-    public double baseRadius;
-    public double height;
-    public double volume;
+    private final double initialRadius;
+    private double baseRadius;
+    private double height;
+    private double volume;
     public boolean complete;
     List<List<Integer>> completePermutationsList;
 
@@ -70,25 +69,16 @@ public class Castle {
         }
     }
 
-    public void addLayerStack(List<Bucket> buckets, List<Integer> permutation, double STEP) {
+    public void addLayerStack(List<Bucket> buckets, List<Integer> permutation, double step) {
         for (Integer i : permutation) {
             Bucket bucket = buckets.get(i - 1);
-            addLayer(STEP, bucket.angle);
+            addLayer(step, bucket.angle);
         }
     }
-    /*
-    public void printLayers() {
-        System.out.printf("Layers of castle %d, top to bottom:%n", number);
-        int j = layers.size() - 1;
-        for (int i = layers.size() - 1; i >= 0; i--) {
-            System.out.println(j-- + ": " + layers.get(i).toString());
-        }
-    }
-    */
+
     @Override
     public String toString() {
-        return String.format("Castle(Number: %d, Initial radius: %f, Current top radius: %f, Height: %f, Volume: %f, Layer count: %d, Complete: %b)",
-                number, initialRadius, baseRadius, height, volume, layers.size(), complete);
+        return String.format("Castle(Number: %d, Initial radius: %.2f, Current top radius: %.2f, Height: %.2f, Volume: %.3f, Layer count: %d, Complete: %b)", number, initialRadius, baseRadius, height, volume, layers.size(), complete);
     }
 
     public Castle getBlankCastle() {

@@ -13,17 +13,23 @@ public class DataReader {
     File castlesFile;
     File bucketsFile;
     File weightsFile;
-    
+    List<Castle> castles;
+    List<Bucket> buckets;
+    WeightsCalculator weightsCalculator;
+
     public void setCastlesPath(String castlesPathname) {
         castlesFile = new File(castlesPathname);
+        castles = getCastles();
     }
 
     public void setBucketsPath(String bucketsPathname) {
         bucketsFile = new File(bucketsPathname);
+        buckets = getBuckets();
     }
 
     public void setWeightsPath(String weightsPathname) {
         weightsFile = new File(weightsPathname);
+        weightsCalculator = getWeights();
     }
 
     public List<Castle> getCastles() {
@@ -44,6 +50,7 @@ public class DataReader {
             radius = Double.parseDouble(parts[1]);
             castleList.add(new Castle(castleNumber, radius));
         }
+        castleScanner.close();
         return castleList;
     }
 
@@ -67,6 +74,7 @@ public class DataReader {
             volume = Double.parseDouble(parts[2]);
             bucketList.add(new Bucket(bucketNumber, angle, volume));
         }
+        bucketScanner.close();
         return bucketList;
     }
 
@@ -79,6 +87,7 @@ public class DataReader {
         }
 
         String[] parts = weightsScanner.nextLine().split(", ");
+        weightsScanner.close();
         double w1 = Double.parseDouble(parts[0]);
         double w2 = Double.parseDouble(parts[1]);
         return new WeightsCalculator(w1, w2);

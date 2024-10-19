@@ -6,24 +6,25 @@ import jp.lab02.zlosnik.Castle;
 import java.util.*;
 
 public abstract class PermutationBuilder {
+    private PermutationBuilder() {}
 
     // Main entry point: returns the valid permutations for given bucketList and STEP
-    public static List<List<Integer>> getPermutations(List<Bucket> bucketList, double STEP) {
+    public static List<List<Integer>> getPermutations(List<Bucket> bucketList, double step) {
         int[] bucketIndexes = new int[bucketList.size()];
         for (int i = 0; i < bucketList.size(); i++) {
             bucketIndexes[i] = bucketList.get(i).number;
         }
 
-        int maxPossibleLength = calculateMaxLength(bucketList, STEP);
+        int maxPossibleLength = calculateMaxLength(bucketList, step);
 
         List<List<Integer>> permutations = generatePermutations(bucketIndexes, maxPossibleLength);
-        return filterValidPermutations(bucketList, permutations, STEP);
+        return filterValidPermutations(bucketList, permutations, step);
     }
 
     // Calculates the maximum possible length of permutations based on total volume and step
-    private static int calculateMaxLength(List<Bucket> bucketList, double STEP) {
+    private static int calculateMaxLength(List<Bucket> bucketList, double step) {
         double totalVolume = bucketList.stream().mapToDouble(bucket -> bucket.volume).sum();
-        return (int) (totalVolume / STEP);
+        return (int) (totalVolume / step);
     }
 
     // Generates all permutations up to the given maximum length
@@ -52,7 +53,7 @@ public abstract class PermutationBuilder {
     }
 
     // Filters permutations that are valid based on the bucket volume and STEP
-    private static List<List<Integer>> filterValidPermutations(List<Bucket> bucketList, List<List<Integer>> permutations, double STEP) {
+    private static List<List<Integer>> filterValidPermutations(List<Bucket> bucketList, List<List<Integer>> permutations, double step) {
         List<List<Integer>> validPermutations = new ArrayList<>();
 
         for (List<Integer> permutation : permutations) {
@@ -66,7 +67,7 @@ public abstract class PermutationBuilder {
                 int count = entry.getValue();
 
                 // Check the validity condition
-                if (count * STEP > bucketList.get(key - 1).volume) {
+                if (count * step > bucketList.get(key - 1).volume) {
                     isValid = false; // Set isValid to false if condition fails
                     break; // No need to check further
                 }
@@ -90,11 +91,11 @@ public abstract class PermutationBuilder {
         return occurrences;
     }
 
-    public static List<List<Integer>> getCompletePermutations(List<List<Integer>> permutations, Castle castle, List<Bucket> bucketList, double STEP) {
+    public static List<List<Integer>> getCompletePermutations(List<List<Integer>> permutations, Castle castle, List<Bucket> bucketList, double step) {
         List<List<Integer>> completePermutations = new ArrayList<>();
         for (List<Integer> permutation : permutations) {
             castle = castle.getBlankCastle();
-            castle.addLayerStack(bucketList, permutation, STEP);
+            castle.addLayerStack(bucketList, permutation, step);
             if (castle.complete) completePermutations.add(permutation);
         }
         return completePermutations;
