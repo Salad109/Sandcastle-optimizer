@@ -3,10 +3,7 @@ package jp.lab02.zlosnik.logic;
 import jp.lab02.zlosnik.Bucket;
 import jp.lab02.zlosnik.Castle;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public abstract class PermutationBuilder {
 
@@ -101,5 +98,26 @@ public abstract class PermutationBuilder {
             if (castle.complete) completePermutations.add(permutation);
         }
         return completePermutations;
+    }
+
+    public static void printCombinations(Map<List<Integer>, List<List<Integer>>> permutationCombinations) {
+        for (Map.Entry<List<Integer>, List<List<Integer>>> entry : permutationCombinations.entrySet()) {
+            String keyString = entry.getKey().toString();
+            String valueString = entry.getValue().toString();
+            System.out.println(keyString + "=" + valueString);
+        }
+    }
+
+    public static void filterCombinations(Map<List<Integer>, List<List<Integer>>> permutationCombinations) {
+        Iterator<Map.Entry<List<Integer>, List<List<Integer>>>> iterator = permutationCombinations.entrySet().iterator();
+
+        // Loop through the map entries
+        while (iterator.hasNext()) {
+            Map.Entry<List<Integer>, List<List<Integer>>> entry = iterator.next();
+            // If the value (a list of lists) is empty, remove the entry
+            if (entry.getValue().isEmpty()) {
+                iterator.remove();
+            }
+        }
     }
 }

@@ -24,31 +24,36 @@ public class Main {
         System.out.println(weightsCalculator);
         System.out.println("==============================");
 
-        System.out.println("Total possible permutations length: " + permutations.size());
-        System.out.println("==============================");
+        System.out.println("Total possible permutations:\t\t" + permutations.size());
 
         for (Castle castle : castleList) {
-            castle.possiblePermutationsList = PermutationBuilder.getCompletePermutations(permutations, castle, bucketList, STEP);
-            System.out.println("Complete permutations length for castle " + castle.number + ": " + castle.possiblePermutationsList.size());
-            System.out.println("==============================");
+            castle.completePermutationsList = PermutationBuilder.getCompletePermutations(permutations, castle, bucketList, STEP);
+            System.out.println("Complete permutations for castle " + castle.number + ":\t" + castle.completePermutationsList.size());
+        }
+        System.out.println("==============================");
+
+
+        Castle firstCastle = castleList.getFirst();
+        Castle secondCastle = castleList.get(1);
+        Map<List<Integer>, List<List<Integer>>> permutationCombinations = new HashMap<>();
+        for (List<Integer> firstCastlePermutation : firstCastle.completePermutationsList) {
+            List<Bucket> newBucketList = dataReader.getBuckets(); // Get fresh bucket list
+
+            Map<Integer, Integer> occurrences = PermutationBuilder.countOccurrences(firstCastlePermutation);
+            for (Map.Entry<Integer, Integer> entry : occurrences.entrySet()) {
+                Integer key = entry.getKey();
+                Integer value = entry.getValue();
+                newBucketList.get(key - 1).volume -= value * STEP;
+            }
+
+            permutations = PermutationBuilder.getPermutations(newBucketList, STEP);
+            secondCastle.completePermutationsList = PermutationBuilder.getCompletePermutations(permutations, secondCastle, newBucketList, STEP);
+            permutationCombinations.put(firstCastlePermutation, secondCastle.completePermutationsList);
         }
 
-        // List<List<List<Integer>>> permutationCombinations;
-        /* A,B,C... = castles   1, 2... = permutations
-        A1 A2...
-        B1 B2 B3...
-        C1 C2...
-        ...
-        A1B1C1 A1B1C2 A1B2C1 A1B2C2 A1B3C1 A1B3C2 A2B1C1 A2B1C2 A2B2C1 A2B2C2 A2B3C1 A2B3C2
-         */
-        Castle firstCastle = castleList.getFirst();
-        for (List<Integer> permutation : firstCastle.possiblePermutationsList) {
-            List<Bucket> newBucketList = dataReader.getBuckets(); // Get fresh bucket list
-            System.out.println("Buckets before:\t" + newBucketList);
-            System.out.println(permutation);
-            System.out.println(PermutationBuilder.countOccurrences(permutation));
-            System.out.println("Buckets after:\t" + newBucketList);
-            System.out.println("==============================");
-        }
+        System.out.println("There are " + permutationCombinations.size() + " combinations");
+        PermutationBuilder.filterCombinations(permutationCombinations);
+        System.out.println("There are " + permutationCombinations.size() + " possible combinations");
+        PermutationBuilder.printCombinations(permutationCombinations);
     }
 }

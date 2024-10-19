@@ -3,7 +3,7 @@ package jp.lab02.zlosnik;
 public class Bucket implements Cloneable {
     public final int number;
     public final double angle;
-    public final double volume;
+    public double volume;
 
     public Bucket(int number, double angle, double volume) {
         this.number = number;
@@ -13,7 +13,7 @@ public class Bucket implements Cloneable {
 
     @Override
     public String toString() {
-        return String.format("Bucket[Number: %d, Angle: %f, Volume: %f]", number, angle, volume);
+        return String.format("Bucket[Number: %d, Angle: %.1f, Volume: %.3f]", number, angle, volume);
     }
 
     @Override
