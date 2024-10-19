@@ -44,5 +44,16 @@ public class Main {
         A1B1C1 A1B1C2 A1B2C1 A1B2C2 A1B3C1 A1B3C2 A2B1C1 A2B1C2 A2B2C1 A2B2C2 A2B3C1 A2B3C2
          */
         System.out.println(castleList.getFirst().possiblePermutationsList);
+        ArrayList<Bucket> newBucketList = getOriginalBucketList(bucketList);
+        System.out.println(bucketList);
+        System.out.println(newBucketList);
+    }
+
+    private static ArrayList<Bucket> getOriginalBucketList(ArrayList<Bucket> originalBucketList) {
+        ArrayList<Bucket> newBucketList = new ArrayList<>();
+        for (Bucket bucket : originalBucketList) {
+            newBucketList.add(bucket.clone());
+        }
+        return newBucketList;
     }
 }
