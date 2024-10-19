@@ -8,7 +8,7 @@ import java.util.*;
 public class Main {
     private static final double STEP = 5;
     private static final boolean PRINT_DATA = true;
-    private static final boolean PRINT_COMBINATIONS = true;
+    private static final boolean PRINT_COMBINATIONS = false;
 
     public static void main(String[] args) {
         DataReader dataReader = new DataReader();
