@@ -17,11 +17,8 @@ public class Bucket implements Cloneable {
     }
 
     @Override
-    public Bucket clone() {
-        try {
-            return (Bucket) super.clone();
-        } catch (CloneNotSupportedException e) {
-            throw new RuntimeException(e);
-        }
+    public Bucket clone() throws CloneNotSupportedException {
+        return (Bucket) super.clone();
     }
+
 }

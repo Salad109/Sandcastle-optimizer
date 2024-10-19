@@ -33,7 +33,7 @@ public class Main {
         System.out.println("==============================");
 
 
-        Castle firstCastle = castleList.getFirst();
+        Castle firstCastle = castleList.get(0);
         Castle secondCastle = castleList.get(1);
         Map<List<Integer>, List<List<Integer>>> permutationCombinations = new HashMap<>();
         for (List<Integer> firstCastlePermutation : firstCastle.completePermutationsList) {
@@ -43,12 +43,12 @@ public class Main {
             for (Map.Entry<Integer, Integer> entry : occurrences.entrySet()) {
                 Integer key = entry.getKey();
                 Integer value = entry.getValue();
-                newBucketList.get(key - 1).volume -= value * STEP;
+                newBucketList.get(key - 1).volume -= value * STEP; // Subtract an appropriate amount of sand from the buckets
             }
 
-            permutations = PermutationBuilder.getPermutations(newBucketList, STEP);
-            secondCastle.completePermutationsList = PermutationBuilder.getCompletePermutations(permutations, secondCastle, newBucketList, STEP);
-            permutationCombinations.put(firstCastlePermutation, secondCastle.completePermutationsList);
+            permutations = PermutationBuilder.getPermutations(newBucketList, STEP); // Compute permutations from the new bucket list
+            secondCastle.completePermutationsList = PermutationBuilder.getCompletePermutations(permutations, secondCastle, newBucketList, STEP); // Filter new permutations
+            permutationCombinations.put(firstCastlePermutation, secondCastle.completePermutationsList); // Save the new permutation combination
         }
 
         System.out.println("There are " + permutationCombinations.size() + " combinations");

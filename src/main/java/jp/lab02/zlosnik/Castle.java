@@ -76,7 +76,7 @@ public class Castle {
             addLayer(STEP, bucket.angle);
         }
     }
-
+    /*
     public void printLayers() {
         System.out.printf("Layers of castle %d, top to bottom:%n", number);
         int j = layers.size() - 1;
@@ -84,7 +84,7 @@ public class Castle {
             System.out.println(j-- + ": " + layers.get(i).toString());
         }
     }
-
+    */
     @Override
     public String toString() {
         return String.format("Castle(Number: %d, Initial radius: %f, Current top radius: %f, Height: %f, Volume: %f, Layer count: %d, Complete: %b)",
