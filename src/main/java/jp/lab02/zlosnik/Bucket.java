@@ -4,7 +4,7 @@ public class Bucket {
     public final int number;
     public final double angle, volume;
 
-    Bucket(int number, double angle, double volume) {
+    public Bucket(int number, double angle, double volume) {
         this.number = number;
         this.angle = angle;
         this.volume = volume;

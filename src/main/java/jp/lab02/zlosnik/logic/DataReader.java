@@ -1,4 +1,7 @@
-package jp.lab02.zlosnik;
+package jp.lab02.zlosnik.logic;
+
+import jp.lab02.zlosnik.Bucket;
+import jp.lab02.zlosnik.Castle;
 
 import java.io.File;
 import java.io.FileNotFoundException;

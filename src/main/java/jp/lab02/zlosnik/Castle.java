@@ -36,7 +36,7 @@ public class Castle {
     public boolean complete;
     List<List<Integer>> possiblePermutationsList;
 
-    Castle(int number, double radius) {
+    public Castle(int number, double radius) {
         this.number = number;
         this.initialRadius = radius;
         baseRadius = radius;
