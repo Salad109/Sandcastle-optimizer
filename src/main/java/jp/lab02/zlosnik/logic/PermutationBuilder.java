@@ -29,30 +29,29 @@ public abstract class PermutationBuilder {
         return (int) (totalVolume / Main.STEP);
     }
 
-    // Generates all permutations up to the given maximum length
     private static List<List<Integer>> generatePermutations(int[] numbers, int maxLength) {
         List<List<Integer>> result = new ArrayList<>();
-        generateRecursivePermutations(result, new ArrayList<>(), numbers, maxLength);
+        generatePermutationsRecursive(result, new ArrayList<>(), numbers, maxLength);
         return result;
     }
 
-    // Recursive helper for generating permutations
-    private static void generateRecursivePermutations(List<List<Integer>> result, List<Integer> current, int[] numbers, int maxLength) {
-        // Base case: if the current permutation is valid, add it
-        if (!current.isEmpty() && current.size() <= maxLength) {
+    private static void generatePermutationsRecursive(List<List<Integer>> result, List<Integer> current, int[] numbers, int maxLength) {
+        // Base case: stop recursion if we hit the maximum length
+        if (current.size() > maxLength) return;
+
+        // Add the current permutation if it's non-empty
+        if (!current.isEmpty()) {
             result.add(new ArrayList<>(current));
         }
 
-        // Stop recursion if we hit the maximum length
-        if (current.size() == maxLength) return;
-
-        // Recursively add more numbers to the current permutation
+        // Recursively generate more permutations
         for (int number : numbers) {
             current.add(number);
-            generateRecursivePermutations(result, current, numbers, maxLength);
-            current.removeLast();  // Backtrack
+            generatePermutationsRecursive(result, current, numbers, maxLength);
+            current.removeLast();  // Backtrack after recursion
         }
     }
+
 
     // Filters permutations that are valid based on the bucket volume and step
     private static List<List<Integer>> filterPossiblePermutations(List<Bucket> bucketList, List<List<Integer>> permutations) {
@@ -133,6 +132,7 @@ public abstract class PermutationBuilder {
             }
         }
         return filterCombinations(permutationCombinations);
+
     }
 
     private static Map<List<Integer>, List<List<Integer>>> filterCombinations(Map<List<Integer>, List<List<Integer>>> permutationCombinations) {
@@ -149,14 +149,32 @@ public abstract class PermutationBuilder {
         return permutationCombinations;
     }
 
-    public static List<List<List<Integer>>> cleanUnwrappedCombinations(List<Bucket> bucketList, List<Castle> castleList, List<List<List<Integer>>> unwrappedCombinationList) {
+    public static List<List<List<Integer>>> unwrapCombinations(Map<List<Integer>, List<List<Integer>>> wrappedPermutationCombinations, List<Castle> castleList, List<Bucket> bucketList) {
+        List<List<List<Integer>>> unwrappedCombinationList = new LinkedList<>();
+        Castle firstCastle = castleList.getFirst();
+        for (Map.Entry<List<Integer>, List<List<Integer>>> entry : wrappedPermutationCombinations.entrySet()) {
+            List<Integer> key = entry.getKey();
+            List<List<Integer>> valueList = entry.getValue();
+
+            for (List<Integer> value : valueList) {
+                List<List<Integer>> unwrappedCombination = new LinkedList<>();
+                firstCastle.addLayerStack(bucketList, key);
+                unwrappedCombination.add(key);
+                unwrappedCombination.add(value);
+                unwrappedCombinationList.add(unwrappedCombination);
+            }
+        }
+        return cleanUnwrappedCombinations(bucketList, castleList, unwrappedCombinationList);
+    }
+
+    private static List<List<List<Integer>>> cleanUnwrappedCombinations(List<Bucket> bucketList, List<Castle> castleList, List<List<List<Integer>>> unwrappedCombinationList) {
         List<List<List<Integer>>> cleanCombinationList = new LinkedList<>();
         Castle firstCastle = castleList.get(0);
         Castle secondCastle = castleList.get(1);
-        for(List<List<Integer>> unwrappedCombination : unwrappedCombinationList){
+        for (List<List<Integer>> unwrappedCombination : unwrappedCombinationList) {
             firstCastle.addLayerStack(bucketList, unwrappedCombination.getFirst());
             secondCastle.addLayerStack(bucketList, unwrappedCombination.getLast());
-            if(firstCastle.baseRadius == 0 && secondCastle.baseRadius == 0){
+            if (firstCastle.baseRadius == 0 && secondCastle.baseRadius == 0) {
                 cleanCombinationList.add(unwrappedCombination);
             }
             firstCastle = firstCastle.getBlankCastle();

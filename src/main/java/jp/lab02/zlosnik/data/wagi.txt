@@ -1,1 +1,2 @@
-0.4, 0.6
+# waga piasku, waga wysokości
+0.2, 0.8

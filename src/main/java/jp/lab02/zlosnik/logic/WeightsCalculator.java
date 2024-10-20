@@ -14,6 +14,6 @@ public class WeightsCalculator {
     }
     @Override
     public String toString() {
-        return "WeightsCalculator[" + w1 + ", " + w2 + "]";
+        return "Weights[" + w1 + ", " + w2 + "]";
     }
 }

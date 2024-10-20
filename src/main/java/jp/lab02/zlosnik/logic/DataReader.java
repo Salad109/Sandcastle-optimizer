@@ -93,6 +93,7 @@ public class DataReader {
             throw new RuntimeException(e);
         }
 
+        weightsScanner.nextLine();
         String[] parts = weightsScanner.nextLine().split(", ");
         weightsScanner.close();
         double w1 = Double.parseDouble(parts[0]);

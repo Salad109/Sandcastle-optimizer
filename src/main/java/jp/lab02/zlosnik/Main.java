@@ -9,7 +9,7 @@ public class Main {
     public static final double STEP = 5;
     private static final boolean PRINT_DATA = true;
     private static final boolean PRINT_PERMUTATIONS = true;
-    private static final boolean PRINT_COMBINATIONS = true; // true false
+    private static final boolean PRINT_COMBINATIONS = false; // true false
 
     public static void main(String[] args) {
         DataReader dataReader = new DataReader();
@@ -33,56 +33,47 @@ public class Main {
         }
 
         if (PRINT_PERMUTATIONS) {
-            System.out.println("Total possible permutations:\t\t" + permutations.size());
+            System.out.println("Total possible permutations of sand layers:\t" + permutations.size());
             for (Castle castle : castleList) {
                 castle.completePermutationsList = PermutationBuilder.getCompletePermutations(permutations, castle, bucketList);
-                System.out.println("Complete permutations for castle " + castle.number + ":\t" + castle.completePermutationsList.size());
+                System.out.println("Complete layer permutations for castle " + castle.number + ":\t" + castle.completePermutationsList.size());
             }
             System.out.println("==============================");
         }
 
-        Castle firstCastle = castleList.get(0);
-        Castle secondCastle = castleList.get(1);
 
-        Map<List<Integer>, List<List<Integer>>> permutationCombinations = PermutationBuilder.getCombinations(castleList, dataReader);
-        List<List<List<Integer>>> unwrappedCombinationList = new LinkedList<>();
-        for (Map.Entry<List<Integer>, List<List<Integer>>> entry : permutationCombinations.entrySet()) {
-            List<Integer> key = entry.getKey();
-            List<List<Integer>> valueList = entry.getValue();
-
-            for (List<Integer> value : valueList) {
-                List<List<Integer>> unwrappedCombination = new LinkedList<>();
-                firstCastle.addLayerStack(bucketList, key);
-                unwrappedCombination.add(key);
-                unwrappedCombination.add(value);
-                unwrappedCombinationList.add(unwrappedCombination);
-            }
-        }
-
-        unwrappedCombinationList = PermutationBuilder.cleanUnwrappedCombinations(bucketList, castleList, unwrappedCombinationList);
+        Map<List<Integer>, List<List<Integer>>> wrappedPermutationCombinations = PermutationBuilder.getCombinations(castleList, dataReader);
+        List<List<List<Integer>>> cleanCombinationList = PermutationBuilder.unwrapCombinations(wrappedPermutationCombinations, castleList, bucketList);
+        System.out.printf("There are a total of %d possible combinations to build castles%n", cleanCombinationList.size());
 
         double score;
         double bestScore = 0;
         int index = 0;
         int bestIndex = 0;
-        for (List<List<Integer>> unwrappedCombination : unwrappedCombinationList) {
-            firstCastle.addLayerStack(bucketList, unwrappedCombination.getFirst());
-            secondCastle.addLayerStack(bucketList, unwrappedCombination.getLast());
+        double bestHeight = 0;
+        double bestLeftoverVolume = 0;
+        Castle firstCastle = castleList.get(0);
+        Castle secondCastle = castleList.get(1);
+        for (List<List<Integer>> combination : cleanCombinationList) {
+            firstCastle.addLayerStack(bucketList, combination.getFirst());
+            secondCastle.addLayerStack(bucketList, combination.getLast());
             double leftoverVolume = dataReader.getTotalBucketVolume() - firstCastle.volume - secondCastle.volume;
             double avgHeight = (firstCastle.height + secondCastle.height) / 2;
             score = weightsCalculator.calculateScore(leftoverVolume, avgHeight);
+            index++;
             if (PRINT_COMBINATIONS) {
-                System.out.printf("%d\t| Leftover volume: %6.2f\t| Average height: %6.3f\t| Score: %8.5f\t| First layers: %s\t|\tSecond layers: %s%n", index++, leftoverVolume, avgHeight, score, unwrappedCombination.getFirst(), unwrappedCombination.getLast());
+                System.out.printf("%d\t| Leftover volume: %6.2f\t| Average height: %6.3f\t| Score: %8.5f\t| First layers: %s\t|\tSecond layers: %s%n", index, leftoverVolume, avgHeight, score, combination.getFirst(), combination.getLast());
             }
             if (score > bestScore) {
                 bestScore = score;
                 bestIndex = index - 1;
+                bestHeight = avgHeight;
+                bestLeftoverVolume = leftoverVolume;
             }
 
             firstCastle = firstCastle.getBlankCastle();
             secondCastle = secondCastle.getBlankCastle();
         }
-        System.out.println("There are " + unwrappedCombinationList.size() + " possible permutation combinations");
-        System.out.printf("The best combination was number %d", bestIndex);
+        System.out.printf("The winner is combination %d with an average height of %.3f and leftover volume of %.2f", bestIndex, bestHeight, bestLeftoverVolume);
     }
 }
