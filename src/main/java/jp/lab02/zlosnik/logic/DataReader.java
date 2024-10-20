@@ -10,19 +10,13 @@ import java.util.List;
 import java.util.Scanner;
 
 public class DataReader {
-    File castlesFile;
-    File bucketsFile;
-    File weightsFile;
-    List<Castle> castles;
-    List<Bucket> buckets;
-    WeightsCalculator weightsCalculator;
-    Scanner castleScanner;
-    Scanner bucketScanner;
-    Scanner weightsScanner;
+    private File castlesFile;
+    private File bucketsFile;
+    private File weightsFile;
+    private List<Bucket> buckets;
 
     public void setCastlesPath(String castlesPathname) {
         castlesFile = new File(castlesPathname);
-        castles = getCastles();
     }
 
     public void setBucketsPath(String bucketsPathname) {
@@ -32,7 +26,6 @@ public class DataReader {
 
     public void setWeightsPath(String weightsPathname) {
         weightsFile = new File(weightsPathname);
-        weightsCalculator = getWeights();
     }
 
     public double getTotalBucketVolume() {
@@ -44,6 +37,7 @@ public class DataReader {
     }
 
     public List<Castle> getCastles() {
+        Scanner castleScanner;
         List<Castle> castleList = new ArrayList<>();
         try {
             castleScanner = new Scanner(castlesFile);
@@ -64,6 +58,7 @@ public class DataReader {
     }
 
     public List<Bucket> getBuckets() {
+        Scanner bucketScanner;
         List<Bucket> bucketList = new ArrayList<>();
         try {
             bucketScanner = new Scanner(bucketsFile);
@@ -87,6 +82,7 @@ public class DataReader {
     }
 
     public WeightsCalculator getWeights() {
+        Scanner weightsScanner;
         try {
             weightsScanner = new Scanner(weightsFile);
         } catch (FileNotFoundException e) {

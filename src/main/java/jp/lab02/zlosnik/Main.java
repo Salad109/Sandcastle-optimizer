@@ -6,10 +6,10 @@ import jp.lab02.zlosnik.logic.*;
 import java.util.*;
 
 public class Main {
-    public static final double STEP = 5;
+    public static final double STEP = 4;
     private static final boolean PRINT_DATA = true;
     private static final boolean PRINT_PERMUTATIONS = true;
-    private static final boolean PRINT_COMBINATIONS = false; // true false
+    private static final boolean PRINT_COMBINATIONS = true; // true false
 
     public static void main(String[] args) {
         DataReader dataReader = new DataReader();
@@ -62,11 +62,11 @@ public class Main {
             score = weightsCalculator.calculateScore(leftoverVolume, avgHeight);
             index++;
             if (PRINT_COMBINATIONS) {
-                System.out.printf("%d\t| Leftover volume: %6.2f\t| Average height: %6.3f\t| Score: %8.5f\t| First layers: %s\t|\tSecond layers: %s%n", index, leftoverVolume, avgHeight, score, combination.getFirst(), combination.getLast());
+                System.out.printf("%d\t| Leftover volume: %6.2f\t| Average height: %6.3f\t| Score: %8.5f\t| First castle layers: %s\t|\tSecond castle layers: %s%n", index, leftoverVolume, avgHeight, score, combination.getFirst(), combination.getLast());
             }
             if (score > bestScore) {
                 bestScore = score;
-                bestIndex = index - 1;
+                bestIndex = index;
                 bestHeight = avgHeight;
                 bestLeftoverVolume = leftoverVolume;
             }
@@ -74,6 +74,7 @@ public class Main {
             firstCastle = firstCastle.getBlankCastle();
             secondCastle = secondCastle.getBlankCastle();
         }
-        System.out.printf("The winner is combination %d with an average height of %.3f and leftover volume of %.2f", bestIndex, bestHeight, bestLeftoverVolume);
+        System.out.println("The winner:");
+        System.out.printf("%d\t| Leftover volume: %6.2f\t| Average height: %6.3f\t| Score: %8.5f\t| First castle layers: %s\t|\tSecond castle layers: %s%n", bestIndex, bestLeftoverVolume, bestHeight, bestScore, cleanCombinationList.get(bestIndex - 1).getFirst(), cleanCombinationList.get(bestIndex - 1).getLast());
     }
 }
