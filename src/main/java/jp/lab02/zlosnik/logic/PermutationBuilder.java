@@ -148,4 +148,20 @@ public abstract class PermutationBuilder {
         }
         return permutationCombinations;
     }
+
+    public static List<List<List<Integer>>> cleanUnwrappedCombinations(List<Bucket> bucketList, List<Castle> castleList, List<List<List<Integer>>> unwrappedCombinationList) {
+        List<List<List<Integer>>> cleanCombinationList = new LinkedList<>();
+        Castle firstCastle = castleList.get(0);
+        Castle secondCastle = castleList.get(1);
+        for(List<List<Integer>> unwrappedCombination : unwrappedCombinationList){
+            firstCastle.addLayerStack(bucketList, unwrappedCombination.getFirst());
+            secondCastle.addLayerStack(bucketList, unwrappedCombination.getLast());
+            if(firstCastle.baseRadius == 0 && secondCastle.baseRadius == 0){
+                cleanCombinationList.add(unwrappedCombination);
+            }
+            firstCastle = firstCastle.getBlankCastle();
+            secondCastle = secondCastle.getBlankCastle();
+        }
+        return cleanCombinationList;
+    }
 }

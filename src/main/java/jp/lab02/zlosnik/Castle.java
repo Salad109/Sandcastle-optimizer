@@ -32,7 +32,7 @@ public class Castle implements Cloneable {
         this.completePermutationsList = new LinkedList<>();
     }
 
-    public void addLayer(double volume, double angle) {
+    private void addLayer(double volume, double angle) {
         if (!complete) {
             double tanTheta = Math.tan(Math.toRadians(angle));
             double layerHeight;
