@@ -8,7 +8,8 @@ import java.util.*;
 public class Main {
     private static final double STEP = 5;
     private static final boolean PRINT_DATA = true;
-    private static final boolean PRINT_COMBINATIONS = false;
+    private static final boolean PRINT_PERMUTATIONS = true;
+    private static final boolean PRINT_COMBINATIONS = true; // true false
 
     public static void main(String[] args) {
         DataReader dataReader = new DataReader();
@@ -21,53 +22,51 @@ public class Main {
         List<List<Integer>> permutations = PermutationBuilder.getPermutations(bucketList, STEP);
         WeightsCalculator weightsCalculator = dataReader.getWeights();
         if (PRINT_DATA) {
-            System.out.println(castleList);
-            System.out.println(bucketList);
+            for (Castle castle : castleList) {
+                System.out.println(castle.toString());
+            }
+            for (Bucket bucket : bucketList) {
+                System.out.println(bucket.toString());
+            }
             System.out.println(weightsCalculator);
+            System.out.println("==============================");
+        }
+
+        if (PRINT_PERMUTATIONS) {
+            System.out.println("Total possible permutations:\t\t" + permutations.size());
+            for (Castle castle : castleList) {
+                castle.completePermutationsList = PermutationBuilder.getCompletePermutations(permutations, castle, bucketList, STEP);
+                System.out.println("Complete permutations for castle " + castle.number + ":\t" + castle.completePermutationsList.size());
+            }
+            System.out.println("==============================");
         }
 
 
-        System.out.println("==============================");
-        System.out.println("Total possible permutations:\t\t" + permutations.size());
-        for (Castle castle : castleList) {
-            castle.completePermutationsList = PermutationBuilder.getCompletePermutations(permutations, castle, bucketList, STEP);
-            System.out.println("Complete permutations for castle " + castle.number + ":\t" + castle.completePermutationsList.size());
-        }
-        System.out.println("==============================");
+        Map<List<Integer>, List<List<Integer>>> permutationCombinations = PermutationBuilder.getCombinations(castleList, dataReader, STEP, permutations);
+        List<List<List<Integer>>> unwrappedCombinationList = new LinkedList<>();
 
+        for (Map.Entry<List<Integer>, List<List<Integer>>> entry : permutationCombinations.entrySet()) {
+            List<Integer> key = entry.getKey();
+            List<List<Integer>> valueList = entry.getValue();
 
-        Map<List<Integer>, List<List<Integer>>> permutationCombinations = new HashMap<>();
+            for (List<Integer> value : valueList) {
+                List<List<Integer>> unwrappedCombination = new LinkedList<>();
+                unwrappedCombination.add(key);
+                unwrappedCombination.add(value);
+                unwrappedCombinationList.add(unwrappedCombination);
 
-        for (Castle castle : castleList) {
-            // For each castle, process its permutations
-            for (List<Integer> castlePermutation : castle.completePermutationsList) {
-                // Get a fresh bucket list for each permutation processing
-                List<Bucket> newBucketList = dataReader.getBuckets();
-
-                // Count occurrences of the permutation for the current castle
-                Map<Integer, Integer> occurrences = PermutationBuilder.countOccurrences(castlePermutation);
-
-                // Subtract sand from the appropriate buckets based on the current castle's permutation
-                for (Map.Entry<Integer, Integer> entry : occurrences.entrySet()) {
-                    Integer key = entry.getKey();
-                    Integer value = entry.getValue();
-                    newBucketList.get(key - 1).volume -= value * STEP; // Subtract sand based on the occurrence
-                }
-
-                // Compute new permutations based on the updated bucket list
-                permutations = PermutationBuilder.getPermutations(newBucketList, STEP);
-
-                // Filter new permutations for the current castle
-                List<List<Integer>> filteredPermutations = PermutationBuilder.getCompletePermutations(permutations, castle, newBucketList, STEP);
-
-                // Store the new permutation combination for the current castle
-                permutationCombinations.put(castlePermutation, filteredPermutations);
+                // Zbuduj zamek 1 z warstw "key"
+                // Zbuduj zamek 2 z warstw "value"
+                // Oblicz ich wspólne masy i max wysokość
             }
         }
+        if (PRINT_COMBINATIONS) {
+            int i = 0;
+            for (List<List<Integer>> unwrappedCombination : unwrappedCombinationList) {
+                System.out.println(i++ + " = " + unwrappedCombination);
+            }
+            System.out.println("There are " + unwrappedCombinationList.size() + " possible permutation combinations");
+        }
 
-        System.out.println("There are " + permutationCombinations.size() + " combinations");
-        PermutationBuilder.filterCombinations(permutationCombinations);
-        System.out.println("There are " + permutationCombinations.size() + " possible combinations");
-        if (PRINT_COMBINATIONS) PermutationBuilder.printCombinations(permutationCombinations);
     }
 }

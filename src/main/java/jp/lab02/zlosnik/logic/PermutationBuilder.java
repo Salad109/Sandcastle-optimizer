@@ -6,7 +6,8 @@ import jp.lab02.zlosnik.Castle;
 import java.util.*;
 
 public abstract class PermutationBuilder {
-    private PermutationBuilder() {}
+    private PermutationBuilder() {
+    }
 
     // Main entry point: returns the valid permutations for given bucketList and STEP
     public static List<List<Integer>> getPermutations(List<Bucket> bucketList, double step) {
@@ -18,7 +19,7 @@ public abstract class PermutationBuilder {
         int maxPossibleLength = calculateMaxLength(bucketList, step);
 
         List<List<Integer>> permutations = generatePermutations(bucketIndexes, maxPossibleLength);
-        return filterValidPermutations(bucketList, permutations, step);
+        return filterPossiblePermutations(bucketList, permutations, step);
     }
 
     // Calculates the maximum possible length of permutations based on total volume and step
@@ -53,7 +54,7 @@ public abstract class PermutationBuilder {
     }
 
     // Filters permutations that are valid based on the bucket volume and STEP
-    private static List<List<Integer>> filterValidPermutations(List<Bucket> bucketList, List<List<Integer>> permutations, double step) {
+    private static List<List<Integer>> filterPossiblePermutations(List<Bucket> bucketList, List<List<Integer>> permutations, double step) {
         List<List<Integer>> validPermutations = new ArrayList<>();
 
         for (List<Integer> permutation : permutations) {
@@ -109,7 +110,38 @@ public abstract class PermutationBuilder {
         }
     }
 
-    public static void filterCombinations(Map<List<Integer>, List<List<Integer>>> permutationCombinations) {
+    public static Map<List<Integer>, List<List<Integer>>> getCombinations(List<Castle> castleList, DataReader dataReader, double step, List<List<Integer>> permutations) {
+        Map<List<Integer>, List<List<Integer>>> permutationCombinations = new HashMap<>();
+        for (Castle castle : castleList) {
+            // For each castle, process its permutations
+            for (List<Integer> castlePermutation : castle.completePermutationsList) {
+                // Get a fresh bucket list for each permutation processing
+                List<Bucket> newBucketList = dataReader.getBuckets();
+
+                // Count occurrences of the permutation for the current castle
+                Map<Integer, Integer> occurrences = PermutationBuilder.countOccurrences(castlePermutation);
+
+                // Subtract sand from the appropriate buckets based on the current castle's permutation
+                for (Map.Entry<Integer, Integer> entry : occurrences.entrySet()) {
+                    Integer key = entry.getKey();
+                    Integer value = entry.getValue();
+                    newBucketList.get(key - 1).volume -= value * step; // Subtract sand based on the occurrences
+                }
+
+                // Compute new permutations based on the updated bucket list
+                permutations = PermutationBuilder.getPermutations(newBucketList, step);
+
+                // Filter new permutations for the current castle
+                List<List<Integer>> filteredPermutations = PermutationBuilder.getCompletePermutations(permutations, castle, newBucketList, step);
+
+                // Store the new permutation combination for the current castle
+                permutationCombinations.put(castlePermutation, filteredPermutations);
+            }
+        }
+        return filterCombinations(permutationCombinations);
+    }
+
+    private static Map<List<Integer>, List<List<Integer>>> filterCombinations(Map<List<Integer>, List<List<Integer>>> permutationCombinations) {
         Iterator<Map.Entry<List<Integer>, List<List<Integer>>>> iterator = permutationCombinations.entrySet().iterator();
 
         // Loop through the map entries
@@ -120,5 +152,6 @@ public abstract class PermutationBuilder {
                 iterator.remove();
             }
         }
+        return permutationCombinations;
     }
 }

@@ -32,7 +32,7 @@ public class Castle {
     private double height;
     private double volume;
     public boolean complete;
-    List<List<Integer>> completePermutationsList;
+    public List<List<Integer>> completePermutationsList;
 
     public Castle(int number, double radius) {
         this.number = number;

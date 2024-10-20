@@ -16,6 +16,9 @@ public class DataReader {
     List<Castle> castles;
     List<Bucket> buckets;
     WeightsCalculator weightsCalculator;
+    Scanner castleScanner;
+    Scanner bucketScanner;
+    Scanner weightsScanner;
 
     public void setCastlesPath(String castlesPathname) {
         castlesFile = new File(castlesPathname);
@@ -34,13 +37,11 @@ public class DataReader {
 
     public List<Castle> getCastles() {
         ArrayList<Castle> castleList = new ArrayList<>();
-        Scanner castleScanner;
         try {
             castleScanner = new Scanner(castlesFile);
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
-
         int castleNumber;
         double radius;
         castleScanner.nextLine();
@@ -56,7 +57,6 @@ public class DataReader {
 
     public List<Bucket> getBuckets() {
         ArrayList<Bucket> bucketList = new ArrayList<>();
-        Scanner bucketScanner;
         try {
             bucketScanner = new Scanner(bucketsFile);
         } catch (FileNotFoundException e) {
@@ -79,7 +79,6 @@ public class DataReader {
     }
 
     public WeightsCalculator getWeights() {
-        Scanner weightsScanner;
         try {
             weightsScanner = new Scanner(weightsFile);
         } catch (FileNotFoundException e) {
