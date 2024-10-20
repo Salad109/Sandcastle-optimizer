@@ -4,40 +4,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Castle implements Cloneable {
-    public static class Layer implements Cloneable {
-        final double volume;
-        final double angle;
-        final double height;
-        final double bottomWidth;
-        final double topWidth;
-
-        Layer(double volume, double angle, double height, double bottomWidth, double topWidth) {
-            this.volume = volume;
-            this.angle = angle;
-            this.height = height;
-            this.bottomWidth = bottomWidth;
-            this.topWidth = topWidth;
-        }
-
-        @Override
-        public Layer clone() {
-            try {
-                return (Layer) super.clone();
-            } catch (CloneNotSupportedException e) {
-                throw new RuntimeException(e);
-            }
-        }
-
-        @Override
-        public String toString() {
-            return String.format("Layer(volume=%f, angle=%f, height=%f, bottom width=%f, top width=%f)", volume, angle, height, bottomWidth, topWidth);
-        }
-    }
-
-    private final List<Layer> layers;
     public final int number;
     private final double initialRadius;
-    private double baseRadius;
+    public double baseRadius;
     public double height;
     public double volume;
     public boolean complete;
@@ -49,22 +18,17 @@ public class Castle implements Cloneable {
         this.baseRadius = radius;
         this.height = 0;
         this.volume = 0;
-        this.layers = new LinkedList<>();
         this.complete = false;
         this.completePermutationsList = new LinkedList<>();
     }
 
-    private Castle(List<Layer> layers, int number, double initialRadius, double baseRadius, double height, double volume, boolean complete) {
+    private Castle(int number, double initialRadius, double baseRadius, double height, double volume, boolean complete) {
         this.number = number;
         this.initialRadius = initialRadius;
         this.baseRadius = baseRadius;
         this.height = height;
         this.volume = volume;
         this.complete = complete;
-        this.layers = new LinkedList<>();
-        for (Layer layer : layers) {
-            this.layers.add(layer.clone());
-        }
         this.completePermutationsList = new LinkedList<>();
     }
 
@@ -81,13 +45,11 @@ public class Castle implements Cloneable {
                 layerHeight = 3 * volume / (PI * (baseRadius * baseRadius));
                 this.height += layerHeight;
                 this.volume += (PI * baseRadius * baseRadius * layerHeight) / 3;
-                layers.add(new Layer((PI * baseRadius * baseRadius * layerHeight) / 3, angle, layerHeight, baseRadius, 0));
                 baseRadius = 0;
             } else { // Adding full layer.
                 layerHeight = 3 * volume / (PI * ((baseRadius * baseRadius) + (baseRadius * topRadius) + (topRadius * topRadius)));
                 this.height += layerHeight;
                 this.volume += volume;
-                layers.add(new Layer(volume, angle, layerHeight, baseRadius, topRadius));
                 baseRadius = topRadius;
             }
         }
@@ -102,7 +64,7 @@ public class Castle implements Cloneable {
 
     @Override
     public String toString() {
-        return String.format("Castle(Number: %d, Initial radius: %.2f, Current top radius: %.2f, Height: %.2f, Volume: %.3f, Layer count: %d, Complete: %b)", number, initialRadius, baseRadius, height, volume, layers.size(), complete);
+        return String.format("Castle(Number: %d, Initial radius: %.2f, Current top radius: %.2f, Height: %.2f, Volume: %.3f, Complete: %b)", number, initialRadius, baseRadius, height, volume, complete);
     }
 
     public Castle getBlankCastle() {
@@ -110,6 +72,6 @@ public class Castle implements Cloneable {
     }
 
     public Castle clone() {
-        return new Castle(layers, number, initialRadius, baseRadius, height, volume, complete);
+        return new Castle(number, initialRadius, baseRadius, height, volume, complete);
     }
 }

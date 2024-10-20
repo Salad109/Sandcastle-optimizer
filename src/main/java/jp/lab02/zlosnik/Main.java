@@ -44,7 +44,6 @@ public class Main {
 
         Map<List<Integer>, List<List<Integer>>> permutationCombinations = PermutationBuilder.getCombinations(castleList, dataReader);
         List<List<List<Integer>>> unwrappedCombinationList = new LinkedList<>();
-
         for (Map.Entry<List<Integer>, List<List<Integer>>> entry : permutationCombinations.entrySet()) {
             List<Integer> key = entry.getKey();
             List<List<Integer>> valueList = entry.getValue();
@@ -69,11 +68,10 @@ public class Main {
             double avgHeight = (firstCastle.height + secondCastle.height) / 2;
             score = weightsCalculator.calculateScore(leftoverVolume, avgHeight);
             if (PRINT_COMBINATIONS) {
-                System.out.printf("%d\t| Leftover volume: %6.2f\t| Average height: %6.3f\t| Score: %6.3f\t| First layers: %s\t|\tSecond layers: %s%n",
-                        index++, leftoverVolume, avgHeight, score, unwrappedCombination.getFirst(), unwrappedCombination.getLast());
-                System.out.println("H1: " + firstCastle.height + " H2: " + secondCastle.height);
+                System.out.printf("%d\t| Leftover volume: %6.2f\t| Average height: %6.3f\t| Score: %8.5f\t| First layers: %s\t|\tSecond layers: %s%n", index++, leftoverVolume, avgHeight, score, unwrappedCombination.getFirst(), unwrappedCombination.getLast());
+                System.out.println("H1: " + firstCastle.height + " H2: " + secondCastle.height + "| R1: " + firstCastle.baseRadius + " R2: " + secondCastle.baseRadius);
             }
-            if (score > bestScore) {
+            if (score >= bestScore) {
                 bestScore = score;
                 bestIndex = index;
             }
@@ -81,9 +79,8 @@ public class Main {
             firstCastle = firstCastle.getBlankCastle();
             secondCastle = secondCastle.getBlankCastle();
         }
+        bestIndex--;
         System.out.println("There are " + unwrappedCombinationList.size() + " possible permutation combinations");
         System.out.printf("The best combination was number %d", bestIndex);
-
-
     }
 }
