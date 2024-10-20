@@ -16,7 +16,6 @@ public class Bucket implements Cloneable {
         return String.format("Bucket[Number: %d, Angle: %.1f, Volume: %.3f]", number, angle, volume);
     }
 
-    @Override
     public Bucket clone() throws CloneNotSupportedException {
         return (Bucket) super.clone();
     }

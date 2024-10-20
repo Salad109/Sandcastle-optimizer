@@ -3,8 +3,8 @@ package jp.lab02.zlosnik;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Castle {
-    public static class Layer {
+public class Castle implements Cloneable {
+    public static class Layer implements Cloneable {
         final double volume;
         final double angle;
         final double height;
@@ -20,6 +20,15 @@ public class Castle {
         }
 
         @Override
+        public Layer clone() {
+            try {
+                return (Layer) super.clone();
+            } catch (CloneNotSupportedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        @Override
         public String toString() {
             return String.format("Layer(volume=%f, angle=%f, height=%f, bottom width=%f, top width=%f)", volume, angle, height, bottomWidth, topWidth);
         }
@@ -29,19 +38,34 @@ public class Castle {
     public final int number;
     private final double initialRadius;
     private double baseRadius;
-    private double height;
-    private double volume;
+    public double height;
+    public double volume;
     public boolean complete;
     public List<List<Integer>> completePermutationsList;
 
     public Castle(int number, double radius) {
         this.number = number;
         this.initialRadius = radius;
-        baseRadius = radius;
-        height = 0;
-        volume = 0;
-        layers = new LinkedList<>();
-        complete = false;
+        this.baseRadius = radius;
+        this.height = 0;
+        this.volume = 0;
+        this.layers = new LinkedList<>();
+        this.complete = false;
+        this.completePermutationsList = new LinkedList<>();
+    }
+
+    private Castle(List<Layer> layers, int number, double initialRadius, double baseRadius, double height, double volume, boolean complete) {
+        this.number = number;
+        this.initialRadius = initialRadius;
+        this.baseRadius = baseRadius;
+        this.height = height;
+        this.volume = volume;
+        this.complete = complete;
+        this.layers = new LinkedList<>();
+        for (Layer layer : layers) {
+            this.layers.add(layer.clone());
+        }
+        this.completePermutationsList = new LinkedList<>();
     }
 
     public void addLayer(double volume, double angle) {
@@ -69,10 +93,10 @@ public class Castle {
         }
     }
 
-    public void addLayerStack(List<Bucket> buckets, List<Integer> permutation, double step) {
+    public void addLayerStack(List<Bucket> buckets, List<Integer> permutation) {
         for (Integer i : permutation) {
             Bucket bucket = buckets.get(i - 1);
-            addLayer(step, bucket.angle);
+            addLayer(Main.STEP, bucket.angle);
         }
     }
 
@@ -83,5 +107,9 @@ public class Castle {
 
     public Castle getBlankCastle() {
         return new Castle(number, initialRadius);
+    }
+
+    public Castle clone() {
+        return new Castle(layers, number, initialRadius, baseRadius, height, volume, complete);
     }
 }

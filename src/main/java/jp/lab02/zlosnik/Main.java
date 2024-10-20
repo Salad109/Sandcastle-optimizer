@@ -6,7 +6,7 @@ import jp.lab02.zlosnik.logic.*;
 import java.util.*;
 
 public class Main {
-    private static final double STEP = 5;
+    public static final double STEP = 5;
     private static final boolean PRINT_DATA = true;
     private static final boolean PRINT_PERMUTATIONS = true;
     private static final boolean PRINT_COMBINATIONS = true; // true false
@@ -19,7 +19,7 @@ public class Main {
 
         List<Castle> castleList = dataReader.getCastles();
         List<Bucket> bucketList = dataReader.getBuckets();
-        List<List<Integer>> permutations = PermutationBuilder.getPermutations(bucketList, STEP);
+        List<List<Integer>> permutations = PermutationBuilder.getPermutations(bucketList);
         WeightsCalculator weightsCalculator = dataReader.getWeights();
         if (PRINT_DATA) {
             for (Castle castle : castleList) {
@@ -35,14 +35,14 @@ public class Main {
         if (PRINT_PERMUTATIONS) {
             System.out.println("Total possible permutations:\t\t" + permutations.size());
             for (Castle castle : castleList) {
-                castle.completePermutationsList = PermutationBuilder.getCompletePermutations(permutations, castle, bucketList, STEP);
+                castle.completePermutationsList = PermutationBuilder.getCompletePermutations(permutations, castle, bucketList);
                 System.out.println("Complete permutations for castle " + castle.number + ":\t" + castle.completePermutationsList.size());
             }
             System.out.println("==============================");
         }
 
 
-        Map<List<Integer>, List<List<Integer>>> permutationCombinations = PermutationBuilder.getCombinations(castleList, dataReader, STEP, permutations);
+        Map<List<Integer>, List<List<Integer>>> permutationCombinations = PermutationBuilder.getCombinations(castleList, dataReader);
         List<List<List<Integer>>> unwrappedCombinationList = new LinkedList<>();
 
         for (Map.Entry<List<Integer>, List<List<Integer>>> entry : permutationCombinations.entrySet()) {
@@ -54,19 +54,36 @@ public class Main {
                 unwrappedCombination.add(key);
                 unwrappedCombination.add(value);
                 unwrappedCombinationList.add(unwrappedCombination);
+            }
+        }
+        Castle firstCastle = castleList.get(0);
+        Castle secondCastle = castleList.get(1);
+        double score;
+        double bestScore = 0;
+        int index = 0;
+        int bestIndex = 0;
+        for (List<List<Integer>> unwrappedCombination : unwrappedCombinationList) {
+            firstCastle.addLayerStack(bucketList, unwrappedCombination.getFirst());
+            secondCastle.addLayerStack(bucketList, unwrappedCombination.getLast());
+            double leftoverVolume = dataReader.getTotalBucketVolume() - firstCastle.volume - secondCastle.volume;
+            double avgHeight = (firstCastle.height + secondCastle.height) / 2;
+            score = weightsCalculator.calculateScore(leftoverVolume, avgHeight);
+            if (PRINT_COMBINATIONS) {
+                System.out.printf("%d\t| Leftover volume: %6.2f\t| Average height: %6.3f\t| Score: %6.3f\t| First layers: %s\t|\tSecond layers: %s%n",
+                        index++, leftoverVolume, avgHeight, score, unwrappedCombination.getFirst(), unwrappedCombination.getLast());
+                System.out.println("H1: " + firstCastle.height + " H2: " + secondCastle.height);
+            }
+            if (score > bestScore) {
+                bestScore = score;
+                bestIndex = index;
+            }
 
-                // Zbuduj zamek 1 z warstw "key"
-                // Zbuduj zamek 2 z warstw "value"
-                // Oblicz ich wspólne masy i max wysokość
-            }
+            firstCastle = firstCastle.getBlankCastle();
+            secondCastle = secondCastle.getBlankCastle();
         }
-        if (PRINT_COMBINATIONS) {
-            int i = 0;
-            for (List<List<Integer>> unwrappedCombination : unwrappedCombinationList) {
-                System.out.println(i++ + " = " + unwrappedCombination);
-            }
-            System.out.println("There are " + unwrappedCombinationList.size() + " possible permutation combinations");
-        }
+        System.out.println("There are " + unwrappedCombinationList.size() + " possible permutation combinations");
+        System.out.printf("The best combination was number %d", bestIndex);
+
 
     }
 }

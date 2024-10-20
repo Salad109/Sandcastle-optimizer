@@ -35,8 +35,16 @@ public class DataReader {
         weightsCalculator = getWeights();
     }
 
+    public double getTotalBucketVolume() {
+        double volume = 0;
+        for (Bucket bucket : buckets) {
+            volume += bucket.volume;
+        }
+        return volume;
+    }
+
     public List<Castle> getCastles() {
-        ArrayList<Castle> castleList = new ArrayList<>();
+        List<Castle> castleList = new ArrayList<>();
         try {
             castleScanner = new Scanner(castlesFile);
         } catch (FileNotFoundException e) {
@@ -56,7 +64,7 @@ public class DataReader {
     }
 
     public List<Bucket> getBuckets() {
-        ArrayList<Bucket> bucketList = new ArrayList<>();
+        List<Bucket> bucketList = new ArrayList<>();
         try {
             bucketScanner = new Scanner(bucketsFile);
         } catch (FileNotFoundException e) {
