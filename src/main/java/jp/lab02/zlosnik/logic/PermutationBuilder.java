@@ -75,7 +75,7 @@ public abstract class PermutationBuilder {
                 for (Map.Entry<Integer, Integer> entry : occurrences.entrySet()) {
                     Integer key = entry.getKey();
                     Integer value = entry.getValue();
-                    newBucketList.get(key - 1).volume -= value * Main.STEP; // Subtract sand based on the occurrences
+                    newBucketList.get(key - 1).volume -= value * Main.STEP;
                 }
 
                 permutations = PermutationBuilder.getPermutations(newBucketList);
