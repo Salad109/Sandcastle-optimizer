@@ -6,7 +6,7 @@ import jp.lab02.zlosnik.logic.*;
 import java.util.*;
 
 public class Main {
-    public static final double STEP = 4;
+    public static final double STEP = 5;
     private static final boolean PRINT_DATA = true;
     private static final boolean PRINT_PERMUTATIONS = true;
     private static final boolean PRINT_COMBINATIONS = true; // true false
@@ -44,7 +44,7 @@ public class Main {
 
         Map<List<Integer>, List<List<Integer>>> wrappedPermutationCombinations = PermutationBuilder.getCombinations(castleList, dataReader);
         List<List<List<Integer>>> cleanCombinationList = PermutationBuilder.unwrapCombinations(wrappedPermutationCombinations, castleList, bucketList);
-        System.out.printf("There are a total of %d possible combinations to build castles%n", cleanCombinationList.size());
+        System.out.printf("There are a total of %d possible combinations to build %d castles%n", castleList.size(), cleanCombinationList.size());
 
         double score;
         double bestScore = 0;
