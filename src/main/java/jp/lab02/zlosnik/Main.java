@@ -52,18 +52,34 @@ public class Main {
         int bestIndex = 0;
         double bestHeight = 0;
         double bestLeftoverVolume = 0;
-        Castle firstCastle = castleList.get(0);
-        Castle secondCastle = castleList.get(1);
+
         for (List<List<Integer>> combination : cleanCombinationList) {
-            firstCastle.addLayerStack(bucketList, combination.getFirst());
-            secondCastle.addLayerStack(bucketList, combination.getLast());
-            double leftoverVolume = dataReader.getTotalBucketVolume() - firstCastle.volume - secondCastle.volume;
-            double avgHeight = (firstCastle.height + secondCastle.height) / 2;
+            double totalVolume = 0;
+            double totalHeight = 0;
+
+            for (int castleIndex = 0; castleIndex < castleList.size(); castleIndex++) {
+                Castle castle = castleList.get(castleIndex);
+                List<Integer> layers = combination.get(castleIndex);
+                castle.addLayerStack(bucketList, layers);
+
+                totalVolume += castle.volume;
+                totalHeight += castle.height;
+            }
+
+            double leftoverVolume = dataReader.getTotalBucketVolume() - totalVolume;
+            double avgHeight = totalHeight / castleList.size();
+
             score = weightsCalculator.calculateScore(leftoverVolume, avgHeight);
             index++;
+
             if (PRINT_COMBINATIONS) {
-                System.out.printf("%d\t| Leftover volume: %6.2f\t| Average height: %6.3f\t| Score: %8.5f\t| First castle layers: %s\t|\tSecond castle layers: %s%n", index, leftoverVolume, avgHeight, score, combination.getFirst(), combination.getLast());
+                System.out.printf("%d\t| Leftover volume: %6.2f\t| Average height: %6.3f\t| Score: %8.5f", index, leftoverVolume, avgHeight, score);
+                for (int castleIndex = 0; castleIndex < castleList.size(); castleIndex++) {
+                    System.out.printf("\t | Layers of castle %d: %s", castleList.get(castleIndex).number, combination.get(castleIndex));
+                }
+                System.out.println();
             }
+
             if (score > bestScore) {
                 bestScore = score;
                 bestIndex = index;
@@ -71,10 +87,18 @@ public class Main {
                 bestLeftoverVolume = leftoverVolume;
             }
 
-            firstCastle = firstCastle.getBlankCastle();
-            secondCastle = secondCastle.getBlankCastle();
+            castleList.replaceAll(Castle::getBlankCastle);
         }
-        System.out.println("The winner:");
-        System.out.printf("%d\t| Leftover volume: %6.2f\t| Average height: %6.3f\t| Score: %8.5f\t| First castle layers: %s\t|\tSecond castle layers: %s%n", bestIndex, bestLeftoverVolume, bestHeight, bestScore, cleanCombinationList.get(bestIndex - 1).getFirst(), cleanCombinationList.get(bestIndex - 1).getLast());
+
+        if (bestIndex == 0) {
+            System.out.println("There is no winner...");
+        } else {
+            System.out.println("The winner:");
+            System.out.printf("%d\t| Leftover volume: %6.2f\t| Average height: %6.3f\t| Score: %8.5f", bestIndex, bestLeftoverVolume, bestHeight, bestScore);
+            for (int castleIndex = 0; castleIndex < castleList.size(); castleIndex++) {
+                System.out.printf("\t | Layers of castle %d: %s", castleList.get(castleIndex).number, cleanCombinationList.get(bestIndex - 1).get(castleIndex));
+            }
+        }
+
     }
 }
