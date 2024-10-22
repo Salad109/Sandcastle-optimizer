@@ -44,7 +44,7 @@ public class Main {
 
         Map<List<Integer>, List<List<Integer>>> wrappedPermutationCombinations = PermutationBuilder.getCombinations(castleList, dataReader);
         List<List<List<Integer>>> cleanCombinationList = PermutationBuilder.unwrapCombinations(wrappedPermutationCombinations, castleList, bucketList);
-        System.out.printf("There are a total of %d possible combinations to build %d castles%n", castleList.size(), cleanCombinationList.size());
+        System.out.printf("There are a total of %d possible combinations to build %d castles%n", cleanCombinationList.size(), castleList.size());
 
         double score;
         double bestScore = 0;
