@@ -9,9 +9,6 @@ import java.util.*;
 
 public class Main {
     public static final double STEP = 5;
-    private static final boolean PRINT_DATA = true;
-    private static final boolean PRINT_PERMUTATIONS = true;
-    private static final boolean PRINT_COMBINATIONS = true; // true false
 
     public static void main(String[] args) {
         DataReader dataReader = new DataReader();
@@ -24,14 +21,9 @@ public class Main {
         List<List<Integer>> totalPermutations = DataBuilder.getLayerPermutations(bucketList);
         WeightsCalculator weightsCalculator = dataReader.getWeights();
 
-        if (PRINT_DATA) {
-            printData(castleList, bucketList, weightsCalculator);
-        }
+        printData(castleList, bucketList, weightsCalculator);
 
-        if (PRINT_PERMUTATIONS) {
-            printPermutations(totalPermutations, castleList, bucketList);
-        }
-
+        printPermutations(totalPermutations, castleList, bucketList);
 
         List<List<List<Integer>>> allCombinations = Castle.generateAllCombinations(castleList);
         List<List<List<Integer>>> cleanCombinationList = DataFilter.filterCombinations(allCombinations, bucketList);
@@ -63,13 +55,11 @@ public class Main {
             score = weightsCalculator.calculateScore(leftoverVolume, avgHeight);
             index++;
 
-            if (PRINT_COMBINATIONS) {
-                printAttempt(index, leftoverVolume, avgHeight, score);
-                for (int castleIndex = 0; castleIndex < castleList.size(); castleIndex++) {
-                    printCombination(castleList.get(castleIndex).number, combination.get(castleIndex));
-                }
-                System.out.println();
+            printAttempt(index, leftoverVolume, avgHeight, score);
+            for (int castleIndex = 0; castleIndex < castleList.size(); castleIndex++) {
+                printCombination(castleList.get(castleIndex).number, combination.get(castleIndex));
             }
+            System.out.println();
 
             if (score > bestScore) {
                 bestScore = score;
