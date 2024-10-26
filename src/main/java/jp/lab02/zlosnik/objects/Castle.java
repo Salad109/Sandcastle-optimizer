@@ -1,4 +1,6 @@
-package jp.lab02.zlosnik;
+package jp.lab02.zlosnik.objects;
+
+import jp.lab02.zlosnik.Main;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -23,33 +25,33 @@ public class Castle {
         this.permutationsList = new LinkedList<>();
     }
 
-    private void addLayer(double volume, double angle) {
-        if (!complete) {
-            double tanTheta = Math.tan(Math.toRadians(angle));
-            double layerHeight;
-            final double PI = Math.PI;
+    public void addLayer(double volume, double angle) {
+        double tanTheta = Math.tan(Math.toRadians(angle));
+        double layerHeight;
+        final double PI = Math.PI;
 
-            double topRadius = Math.cbrt((baseRadius * baseRadius * baseRadius) - ((12 * volume) / (PI * tanTheta)));
+        double topRadius = Math.cbrt((baseRadius * baseRadius * baseRadius) - ((12 * volume) / (PI * tanTheta)));
 
-            if (topRadius < 0) { // Layer cannot fit fully. Making a triangle.
-                complete = true;
-                layerHeight = 3 * volume / (PI * (baseRadius * baseRadius));
-                this.height += layerHeight;
-                this.volume += (PI * baseRadius * baseRadius * layerHeight) / 3;
-                baseRadius = 0;
-            } else { // Adding full layer.
-                layerHeight = 3 * volume / (PI * ((baseRadius * baseRadius) + (baseRadius * topRadius) + (topRadius * topRadius)));
-                this.height += layerHeight;
-                this.volume += volume;
-                baseRadius = topRadius;
-            }
+        if (topRadius < 0) { // Layer cannot fit fully. Making a triangle.
+            complete = true;
+            layerHeight = 3 * volume / (PI * (baseRadius * baseRadius));
+            this.height += layerHeight;
+            this.volume += (PI * baseRadius * baseRadius * layerHeight) / 3;
+            baseRadius = 0;
+        } else { // Adding full layer.
+            layerHeight = 3 * volume / (PI * ((baseRadius * baseRadius) + (baseRadius * topRadius) + (topRadius * topRadius)));
+            this.height += layerHeight;
+            this.volume += volume;
+            baseRadius = topRadius;
         }
     }
 
     public void addLayerStack(List<Bucket> buckets, List<Integer> permutation) {
         for (Integer i : permutation) {
-            Bucket bucket = buckets.get(i - 1);
-            addLayer(Main.STEP, bucket.angle);
+            if (!complete) {
+                Bucket bucket = buckets.get(i - 1);
+                addLayer(Main.STEP, bucket.angle);
+            }
         }
     }
 
@@ -70,7 +72,8 @@ public class Castle {
     }
 
     // Recursive helper to build combinations
-    private static void generateCombinations(List<Castle> castles, int depth, List<List<Integer>> currentCombination, List<List<List<Integer>>> result) {
+    private static void generateCombinations(List<Castle> castles, int depth, List<List<Integer>>
+            currentCombination, List<List<List<Integer>>> result) {
         // Base case: if we have selected a permutation from each castle
         if (depth == castles.size()) {
             result.add(new ArrayList<>(currentCombination));

@@ -1,13 +1,13 @@
 package jp.lab02.zlosnik.logic;
 
-public record WeightsCalculator(double w1, double w2) {
+public record WeightsCalculator(double leftoverSandValue, double heightValue) {
 
     public double calculateScore(double k1, double k2) {
-        return k1 * w1 + k2 * w2;
+        return k1 * leftoverSandValue + k2 * heightValue;
     }
 
     @Override
     public String toString() {
-        return "Weights[" + w1 + ", " + w2 + "]";
+        return "Weights[Leftover sand value: " + leftoverSandValue + ", height value: " + heightValue + "]";
     }
 }

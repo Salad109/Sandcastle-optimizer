@@ -2,6 +2,8 @@ package jp.lab02.zlosnik;
 
 
 import jp.lab02.zlosnik.logic.*;
+import jp.lab02.zlosnik.objects.Bucket;
+import jp.lab02.zlosnik.objects.Castle;
 
 import java.util.*;
 
@@ -33,7 +35,7 @@ public class Main {
         }
 
         if (PRINT_PERMUTATIONS) {
-            System.out.println("Total possible permutations of sand layers:\t" + permutations.size());
+            System.out.println("Total theoretical permutations of sand layers:\t" + permutations.size());
             for (Castle castle : castleList) {
                 castle.permutationsList = DataBuilder.getPermutationsForCastle(castle, bucketList);
                 System.out.println("Complete layer permutations for castle " + castle.number + ":\t" + castle.permutationsList.size());
@@ -75,8 +77,8 @@ public class Main {
             if (PRINT_COMBINATIONS) {
                 System.out.printf("%d\t| Leftover volume: %6.2f\t| Average height: %6.3f\t| Score: %8.5f", index, leftoverVolume, avgHeight, score);
                 for (int castleIndex = 0; castleIndex < castleList.size(); castleIndex++) {
-                    System.out.printf("\t | Layers of castle %d: %s HEIGHT: %f VOLUME: %f",
-                            castleList.get(castleIndex).number, combination.get(castleIndex), castleList.get(castleIndex).height, castleList.get(castleIndex).volume);
+                    System.out.printf("\t | Layers of castle %d: %s",
+                            castleList.get(castleIndex).number, combination.get(castleIndex));
                 }
                 System.out.println();
             }

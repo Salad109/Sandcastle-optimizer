@@ -1,6 +1,6 @@
 package jp.lab02.zlosnik.logic;
 
-import jp.lab02.zlosnik.Bucket;
+import jp.lab02.zlosnik.objects.Bucket;
 import jp.lab02.zlosnik.Main;
 
 import java.util.*;

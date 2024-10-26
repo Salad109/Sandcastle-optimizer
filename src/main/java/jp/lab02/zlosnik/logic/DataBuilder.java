@@ -1,7 +1,7 @@
 package jp.lab02.zlosnik.logic;
 
-import jp.lab02.zlosnik.Bucket;
-import jp.lab02.zlosnik.Castle;
+import jp.lab02.zlosnik.objects.Bucket;
+import jp.lab02.zlosnik.objects.Castle;
 import jp.lab02.zlosnik.Main;
 
 import java.util.*;
@@ -24,7 +24,7 @@ public abstract class DataBuilder {
 
     private static int calculateMaxLength(List<Bucket> bucketList) {
         double totalVolume = 0.0;
-        for(Bucket bucket : bucketList) {
+        for (Bucket bucket : bucketList) {
             totalVolume += bucket.volume;
         }
         return (int) (totalVolume / Main.STEP);
@@ -55,8 +55,15 @@ public abstract class DataBuilder {
         List<List<Integer>> completePermutations = new ArrayList<>();
         for (List<Integer> permutation : possiblePermutations) {
             castle = castle.getBlankCastle();
-            castle.addLayerStack(bucketList, permutation);
-            if (castle.complete) completePermutations.add(permutation);
+            for (int i = 0; i < permutation.size(); i++) {
+                castle.addLayer(Main.STEP, bucketList.get(permutation.get(i) - 1).angle);
+                if (castle.complete) {
+                    if (i == permutation.size() - 1)
+                        completePermutations.add(permutation);
+                    else
+                        break;
+                }
+            }
         }
         return completePermutations;
     }
