@@ -19,7 +19,7 @@ public class Main {
 
         List<Castle> castleList = dataReader.getCastles();
         List<Bucket> bucketList = dataReader.getBuckets();
-        List<List<Integer>> permutations = PermutationBuilder.getPermutations(bucketList);
+        List<List<Integer>> permutations = PermutationBuilder.getLayerPermutations(bucketList);
         WeightsCalculator weightsCalculator = dataReader.getWeights();
         if (PRINT_DATA) {
             for (Castle castle : castleList) {
@@ -35,8 +35,8 @@ public class Main {
         if (PRINT_PERMUTATIONS) {
             System.out.println("Total possible permutations of sand layers:\t" + permutations.size());
             for (Castle castle : castleList) {
-                castle.completePermutationsList = PermutationBuilder.getPermutationsForCastle(castle, bucketList);
-                System.out.println("Complete layer permutations for castle " + castle.number + ":\t" + castle.completePermutationsList.size());
+                castle.permutationsList = PermutationBuilder.getPermutationsForCastle(castle, bucketList);
+                System.out.println("Complete layer permutations for castle " + castle.number + ":\t" + castle.permutationsList.size());
             }
             System.out.println("==============================");
         }

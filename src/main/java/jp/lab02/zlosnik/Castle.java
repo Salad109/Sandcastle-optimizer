@@ -10,7 +10,7 @@ public class Castle {
     public double height;
     public double volume;
     public boolean complete;
-    public List<List<Integer>> completePermutationsList;
+    public List<List<Integer>> permutationsList;
 
     public Castle(int number, double radius) {
         this.number = number;
@@ -19,7 +19,7 @@ public class Castle {
         this.height = 0;
         this.volume = 0;
         this.complete = false;
-        this.completePermutationsList = new LinkedList<>();
+        this.permutationsList = new LinkedList<>();
     }
 
     private void addLayer(double volume, double angle) {

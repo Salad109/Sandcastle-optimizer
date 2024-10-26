@@ -10,7 +10,7 @@ public abstract class PermutationBuilder {
     private PermutationBuilder() {
     }
 
-    public static List<List<Integer>> getPermutations(List<Bucket> bucketList) {
+    public static List<List<Integer>> getLayerPermutations(List<Bucket> bucketList) {
         int[] bucketIndexes = new int[bucketList.size()];
         for (int i = 0; i < bucketList.size(); i++) {
             bucketIndexes[i] = bucketList.get(i).number;
@@ -56,7 +56,7 @@ public abstract class PermutationBuilder {
     }
 
     public static List<List<Integer>> getPermutationsForCastle(Castle castle, List<Bucket> bucketList) {
-        List<List<Integer>> possiblePermutations = getPermutations(bucketList);
+        List<List<Integer>> possiblePermutations = getLayerPermutations(bucketList);
         List<List<Integer>> completePermutations = new ArrayList<>();
         for (List<Integer> permutation : possiblePermutations) {
             castle = castle.getBlankCastle();
@@ -90,33 +90,20 @@ public abstract class PermutationBuilder {
                 odejmij piasek równy permutacji zamku x+2
                 oblicz możliwe permutacje z pozostałego piasku dla zamku x+3
      */
-    public static List<List<List<Integer>>> getPermutationCombinations(List<Castle> castleList, List<Bucket> originalBucketList) {
+    public static List<List<List<Integer>>> getUnfilteredPermutationCombinations(List<Castle> castleList) {
         List<List<List<Integer>>> combinationList = new LinkedList<>();
-        List<Bucket> bucketListCopy = Bucket.deepCopyList(originalBucketList);
-        for (int i = 0; i < castleList.size(); i++) {
-            List<List<Integer>> combination = new LinkedList<>();
-            castleList.get(i).completePermutationsList = PermutationBuilder.getPermutationsForCastle(castleList.get(i), bucketListCopy);
-            if (i == castleList.size() - 1) {
-            }
-        }
+        List<List<Integer>> combination = new LinkedList<>();
 
 
-        List<List<List<Integer>>> cleanCombinationList = new LinkedList<>();
-        for (List<List<Integer>> combination : combinationList) {
-            for (List<Integer> permutation : combination) {
-                if (!permutation.isEmpty() && !cleanCombinationList.contains(combination)) {
-                    cleanCombinationList.add(combination);
-                }
-            }
-        }
-        return cleanCombinationList;
+
+        return combinationList;
     }
 
     public static Map<List<Integer>, List<List<Integer>>> getCombinations(List<Castle> castleList, DataReader dataReader) {
         Map<List<Integer>, List<List<Integer>>> permutationCombinations = new HashMap<>();
         List<List<Integer>> permutations;
         for (Castle castle : castleList) {
-            for (List<Integer> castlePermutation : castle.completePermutationsList) {
+            for (List<Integer> castlePermutation : castle.permutationsList) {
                 List<Bucket> newBucketList = dataReader.getBuckets();
 
                 Map<Integer, Integer> occurrences = PermutationBuilder.countOccurrences(castlePermutation);
