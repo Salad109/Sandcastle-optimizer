@@ -7,7 +7,9 @@ import jp.lab02.zlosnik.Main;
 import java.util.*;
 
 public abstract class PermutationBuilder {
-    private PermutationBuilder() {}
+    private PermutationBuilder() {
+    }
+
     public static List<List<Integer>> getPermutations(List<Bucket> bucketList) {
         int[] bucketIndexes = new int[bucketList.size()];
         for (int i = 0; i < bucketList.size(); i++) {
@@ -53,14 +55,61 @@ public abstract class PermutationBuilder {
         return occurrences;
     }
 
-    public static List<List<Integer>> getCompletePermutations(List<List<Integer>> permutations, Castle castle, List<Bucket> bucketList) {
+    public static List<List<Integer>> getPermutationsForCastle(Castle castle, List<Bucket> bucketList) {
+        List<List<Integer>> possiblePermutations = getPermutations(bucketList);
         List<List<Integer>> completePermutations = new ArrayList<>();
-        for (List<Integer> permutation : permutations) {
+        for (List<Integer> permutation : possiblePermutations) {
             castle = castle.getBlankCastle();
             castle.addLayerStack(bucketList, permutation);
             if (castle.complete) completePermutations.add(permutation);
         }
         return completePermutations;
+    }
+
+    /*
+     dostępny piasek = całkowity piasek
+     dla każdej permutacji zamku x:
+        jeśli zamek x to ostatni istniejący zamek:
+            wrzuć wszystkie permutacje do kombinacji
+            dodaj ten obiekt do listy kombinacji
+        pobierz dostępny/pozostały piasek
+        odejmij piasek równy permutacji zamku x
+        oblicz możliwe permutacje z pozostałego piasku dla zamku x+1
+        dla każdej permutacji zamku x+1:
+            jeśli zamek x to ostatni istniejący zamek:
+                wrzuć wszystkie permutacje do kombinacji
+                dodaj ten obiekt do listy kombinacji
+            pobierz dostępny/pozostały piasek
+            odejmij piasek równy permutacji zamku x+1
+            oblicz możliwe permutacje z pozostałego piasku dla zamku x+2
+            dla każdej permutacji zamku x+2:
+                jeśli zamek x to ostatni istniejący zamek:
+                    wrzuć wszystkie permutacje do kombinacji
+                    dodaj ten obiekt do listy kombinacji
+                pobierz dostępny/pozostały piasek
+                odejmij piasek równy permutacji zamku x+2
+                oblicz możliwe permutacje z pozostałego piasku dla zamku x+3
+     */
+    public static List<List<List<Integer>>> getPermutationCombinations(List<Castle> castleList, List<Bucket> originalBucketList) {
+        List<List<List<Integer>>> combinationList = new LinkedList<>();
+        List<Bucket> bucketListCopy = Bucket.deepCopyList(originalBucketList);
+        for (int i = 0; i < castleList.size(); i++) {
+            List<List<Integer>> combination = new LinkedList<>();
+            castleList.get(i).completePermutationsList = PermutationBuilder.getPermutationsForCastle(castleList.get(i), bucketListCopy);
+            if (i == castleList.size() - 1) {
+            }
+        }
+
+
+        List<List<List<Integer>>> cleanCombinationList = new LinkedList<>();
+        for (List<List<Integer>> combination : combinationList) {
+            for (List<Integer> permutation : combination) {
+                if (!permutation.isEmpty() && !cleanCombinationList.contains(combination)) {
+                    cleanCombinationList.add(combination);
+                }
+            }
+        }
+        return cleanCombinationList;
     }
 
     public static Map<List<Integer>, List<List<Integer>>> getCombinations(List<Castle> castleList, DataReader dataReader) {
@@ -78,9 +127,7 @@ public abstract class PermutationBuilder {
                     newBucketList.get(key - 1).volume -= value * Main.STEP;
                 }
 
-                permutations = PermutationBuilder.getPermutations(newBucketList);
-
-                List<List<Integer>> filteredPermutations = PermutationBuilder.getCompletePermutations(permutations, castle, newBucketList);
+                List<List<Integer>> filteredPermutations = PermutationBuilder.getPermutationsForCastle(castle, newBucketList);
 
                 permutationCombinations.put(castlePermutation, filteredPermutations);
             }

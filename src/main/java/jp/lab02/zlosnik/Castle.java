@@ -3,7 +3,7 @@ package jp.lab02.zlosnik;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Castle implements Cloneable {
+public class Castle {
     public final int number;
     private final double initialRadius;
     public double baseRadius;
@@ -19,16 +19,6 @@ public class Castle implements Cloneable {
         this.height = 0;
         this.volume = 0;
         this.complete = false;
-        this.completePermutationsList = new LinkedList<>();
-    }
-
-    private Castle(int number, double initialRadius, double baseRadius, double height, double volume, boolean complete) {
-        this.number = number;
-        this.initialRadius = initialRadius;
-        this.baseRadius = baseRadius;
-        this.height = height;
-        this.volume = volume;
-        this.complete = complete;
         this.completePermutationsList = new LinkedList<>();
     }
 
@@ -69,9 +59,5 @@ public class Castle implements Cloneable {
 
     public Castle getBlankCastle() {
         return new Castle(number, initialRadius);
-    }
-
-    public Castle clone() {
-        return new Castle(number, initialRadius, baseRadius, height, volume, complete);
     }
 }
