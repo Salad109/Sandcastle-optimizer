@@ -43,7 +43,7 @@ public class Main {
 
 
         List<List<List<Integer>>> allCombinations = Castle.generateAllCombinations(castleList);
-        List<List<List<Integer>>> cleanCombinationList = DataFilter.filterPossiblePermutations
+        List<List<List<Integer>>> cleanCombinationList = DataFilter.filterCombinations(allCombinations, bucketList);
         System.out.printf("There are a total of %d possible combinations to build %d castles%n", cleanCombinationList.size(), castleList.size());
 
         double score;
@@ -75,7 +75,8 @@ public class Main {
             if (PRINT_COMBINATIONS) {
                 System.out.printf("%d\t| Leftover volume: %6.2f\t| Average height: %6.3f\t| Score: %8.5f", index, leftoverVolume, avgHeight, score);
                 for (int castleIndex = 0; castleIndex < castleList.size(); castleIndex++) {
-                    System.out.printf("\t | Layers of castle %d: %s", castleList.get(castleIndex).number, combination.get(castleIndex));
+                    System.out.printf("\t | Layers of castle %d: %s HEIGHT: %f VOLUME: %f",
+                            castleList.get(castleIndex).number, combination.get(castleIndex), castleList.get(castleIndex).height, castleList.get(castleIndex).volume);
                 }
                 System.out.println();
             }

@@ -1,7 +1,6 @@
 package jp.lab02.zlosnik.logic;
 
 import jp.lab02.zlosnik.Bucket;
-import jp.lab02.zlosnik.Castle;
 import jp.lab02.zlosnik.Main;
 
 import java.util.*;
@@ -56,8 +55,7 @@ public abstract class DataFilter {
         return occurrences;
     }
 
-    public List<List<List<Integer>>> filterCombinations(List<Castle> castleList, List<Bucket> bucketList) {
-        List<List<List<Integer>>> allCombinations = Castle.generateAllCombinations(castleList);
+    public static List<List<List<Integer>>> filterCombinations(List<List<List<Integer>>> allCombinations, List<Bucket> bucketList) {
         List<List<List<Integer>>> validCombinations = new ArrayList<>();
 
         for (List<List<Integer>> combination : allCombinations) {

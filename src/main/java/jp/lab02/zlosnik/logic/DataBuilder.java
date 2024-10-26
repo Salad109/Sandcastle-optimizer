@@ -23,7 +23,10 @@ public abstract class DataBuilder {
     }
 
     private static int calculateMaxLength(List<Bucket> bucketList) {
-        double totalVolume = bucketList.stream().mapToDouble(bucket -> bucket.volume).sum();
+        double totalVolume = 0.0;
+        for(Bucket bucket : bucketList) {
+            totalVolume += bucket.volume;
+        }
         return (int) (totalVolume / Main.STEP);
     }
 
