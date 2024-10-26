@@ -21,26 +21,15 @@ public class Main {
 
         List<Castle> castleList = dataReader.getCastles();
         List<Bucket> bucketList = dataReader.getBuckets();
-        List<List<Integer>> permutations = DataBuilder.getLayerPermutations(bucketList);
+        List<List<Integer>> totalPermutations = DataBuilder.getLayerPermutations(bucketList);
         WeightsCalculator weightsCalculator = dataReader.getWeights();
+
         if (PRINT_DATA) {
-            for (Castle castle : castleList) {
-                System.out.println(castle.toString());
-            }
-            for (Bucket bucket : bucketList) {
-                System.out.println(bucket.toString());
-            }
-            System.out.println(weightsCalculator);
-            System.out.println("==============================");
+            printData(castleList, bucketList, weightsCalculator);
         }
 
         if (PRINT_PERMUTATIONS) {
-            System.out.println("Total theoretical permutations of sand layers:\t" + permutations.size());
-            for (Castle castle : castleList) {
-                castle.permutationsList = DataBuilder.getPermutationsForCastle(castle, bucketList);
-                System.out.println("Complete layer permutations for castle " + castle.number + ":\t" + castle.permutationsList.size());
-            }
-            System.out.println("==============================");
+            printPermutations(totalPermutations, castleList, bucketList);
         }
 
 
@@ -75,10 +64,9 @@ public class Main {
             index++;
 
             if (PRINT_COMBINATIONS) {
-                System.out.printf("%d\t| Leftover volume: %6.2f\t| Average height: %6.3f\t| Score: %8.5f", index, leftoverVolume, avgHeight, score);
+                printAttempt(index, leftoverVolume, avgHeight, score);
                 for (int castleIndex = 0; castleIndex < castleList.size(); castleIndex++) {
-                    System.out.printf("\t | Layers of castle %d: %s",
-                            castleList.get(castleIndex).number, combination.get(castleIndex));
+                    printCombination(castleList.get(castleIndex).number, combination.get(castleIndex));
                 }
                 System.out.println();
             }
@@ -97,11 +85,39 @@ public class Main {
             System.out.println("There is no winner...");
         } else {
             System.out.println("The winner:");
-            System.out.printf("%d\t| Leftover volume: %6.2f\t| Average height: %6.3f\t| Score: %8.5f", bestIndex, bestLeftoverVolume, bestHeight, bestScore);
+            printAttempt(bestIndex, bestLeftoverVolume, bestHeight, bestScore);
             for (int castleIndex = 0; castleIndex < castleList.size(); castleIndex++) {
-                System.out.printf("\t | Layers of castle %d: %s", castleList.get(castleIndex).number, cleanCombinationList.get(bestIndex - 1).get(castleIndex));
+                printCombination(castleList.get(castleIndex).number, cleanCombinationList.get(bestIndex - 1).get(castleIndex));
             }
         }
 
+    }
+
+    public static void printData(List<Castle> castleList, List<Bucket> bucketList, WeightsCalculator weightsCalculator) {
+        for (Castle castle : castleList) {
+            System.out.println(castle.toString());
+        }
+        for (Bucket bucket : bucketList) {
+            System.out.println(bucket.toString());
+        }
+        System.out.println(weightsCalculator);
+        System.out.println("==============================");
+    }
+
+    public static void printPermutations(List<List<Integer>> totalPermutations, List<Castle> castleList, List<Bucket> bucketList) {
+        System.out.println("Total theoretical permutations of sand layers:\t" + totalPermutations.size());
+        for (Castle castle : castleList) {
+            castle.permutationsList = DataBuilder.getPermutationsForCastle(castle, bucketList, totalPermutations);
+            System.out.println("Complete layer permutations for castle " + castle.number + ":\t" + castle.permutationsList.size());
+        }
+        System.out.println("==============================");
+    }
+
+    public static void printAttempt(int index, double leftoverVolume, double height, double score) {
+        System.out.printf("%d\t| Leftover volume: %6.2f\t| Average height: %6.3f\t| Score: %8.5f", index, leftoverVolume, height, score);
+    }
+
+    public static void printCombination(int number, List<Integer> combination) {
+        System.out.printf("\t | Layers of castle %d: %s", number, combination);
     }
 }

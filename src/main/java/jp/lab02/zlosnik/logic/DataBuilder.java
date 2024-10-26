@@ -50,10 +50,9 @@ public abstract class DataBuilder {
         }
     }
 
-    public static List<List<Integer>> getPermutationsForCastle(Castle castle, List<Bucket> bucketList) {
-        List<List<Integer>> possiblePermutations = getLayerPermutations(bucketList);
+    public static List<List<Integer>> getPermutationsForCastle(Castle castle, List<Bucket> bucketList, List<List<Integer>> totalPermutations) {
         List<List<Integer>> completePermutations = new ArrayList<>();
-        for (List<Integer> permutation : possiblePermutations) {
+        for (List<Integer> permutation : totalPermutations) {
             castle = castle.getBlankCastle();
             for (int i = 0; i < permutation.size(); i++) {
                 castle.addLayer(Main.STEP, bucketList.get(permutation.get(i) - 1).angle);
