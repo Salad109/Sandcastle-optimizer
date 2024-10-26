@@ -19,7 +19,7 @@ public class Main {
 
         List<Castle> castleList = dataReader.getCastles();
         List<Bucket> bucketList = dataReader.getBuckets();
-        List<List<Integer>> permutations = PermutationBuilder.getLayerPermutations(bucketList);
+        List<List<Integer>> permutations = DataBuilder.getLayerPermutations(bucketList);
         WeightsCalculator weightsCalculator = dataReader.getWeights();
         if (PRINT_DATA) {
             for (Castle castle : castleList) {
@@ -35,15 +35,15 @@ public class Main {
         if (PRINT_PERMUTATIONS) {
             System.out.println("Total possible permutations of sand layers:\t" + permutations.size());
             for (Castle castle : castleList) {
-                castle.permutationsList = PermutationBuilder.getPermutationsForCastle(castle, bucketList);
+                castle.permutationsList = DataBuilder.getPermutationsForCastle(castle, bucketList);
                 System.out.println("Complete layer permutations for castle " + castle.number + ":\t" + castle.permutationsList.size());
             }
             System.out.println("==============================");
         }
 
 
-        Map<List<Integer>, List<List<Integer>>> wrappedPermutationCombinations = PermutationBuilder.getCombinations(castleList, dataReader);
-        List<List<List<Integer>>> cleanCombinationList = PermutationBuilder.unwrapCombinations(wrappedPermutationCombinations, castleList, bucketList);
+        List<List<List<Integer>>> allCombinations = Castle.generateAllCombinations(castleList);
+        List<List<List<Integer>>> cleanCombinationList = DataFilter.filterPossiblePermutations
         System.out.printf("There are a total of %d possible combinations to build %d castles%n", cleanCombinationList.size(), castleList.size());
 
         double score;

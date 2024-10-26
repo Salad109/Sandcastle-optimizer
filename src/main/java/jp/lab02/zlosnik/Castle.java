@@ -1,5 +1,6 @@
 package jp.lab02.zlosnik;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -59,5 +60,29 @@ public class Castle {
 
     public Castle getBlankCastle() {
         return new Castle(number, initialRadius);
+    }
+
+    // Method to generate all combinations of permutations from the castles
+    public static List<List<List<Integer>>> generateAllCombinations(List<Castle> castles) {
+        List<List<List<Integer>>> result = new ArrayList<>();
+        generateCombinations(castles, 0, new ArrayList<>(), result);
+        return result;
+    }
+
+    // Recursive helper to build combinations
+    private static void generateCombinations(List<Castle> castles, int depth, List<List<Integer>> currentCombination, List<List<List<Integer>>> result) {
+        // Base case: if we have selected a permutation from each castle
+        if (depth == castles.size()) {
+            result.add(new ArrayList<>(currentCombination));
+            return;
+        }
+
+        // Recursive case: iterate over all permutations in the current castle
+        Castle currentCastle = castles.get(depth);
+        for (List<Integer> permutation : currentCastle.permutationsList) {
+            currentCombination.add(permutation);
+            generateCombinations(castles, depth + 1, currentCombination, result);
+            currentCombination.removeLast();  // backtrack
+        }
     }
 }
