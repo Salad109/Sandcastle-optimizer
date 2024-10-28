@@ -1,9 +1,12 @@
-package jp.lab02.zlosnik;
+package zlosnik.jp.lab02;
 
 
-import jp.lab02.zlosnik.logic.*;
-import jp.lab02.zlosnik.objects.Bucket;
-import jp.lab02.zlosnik.objects.Castle;
+import zlosnik.jp.lab02.logic.DataReader;
+import zlosnik.jp.lab02.objects.Bucket;
+import zlosnik.jp.lab02.objects.Castle;
+import zlosnik.jp.lab02.logic.DataBuilder;
+import zlosnik.jp.lab02.logic.DataFilter;
+import zlosnik.jp.lab02.logic.WeightsCalculator;
 
 import java.util.*;
 
@@ -12,9 +15,9 @@ public class Main {
 
     public static void main(String[] args) {
         DataReader dataReader = new DataReader();
-        dataReader.setCastlesPath("src/main/java/jp/lab02/zlosnik/data/miejsca.txt");
-        dataReader.setBucketsPath("src/main/java/jp/lab02/zlosnik/data/wiaderka.txt");
-        dataReader.setWeightsPath("src/main/java/jp/lab02/zlosnik/data/wagi.txt");
+        dataReader.setCastlesPath("src/main/java/zlosnik/jp/lab02/data/miejsca.txt");
+        dataReader.setBucketsPath("src/main/java/zlosnik/jp/lab02/data/wiaderka.txt");
+        dataReader.setWeightsPath("src/main/java/zlosnik/jp/lab02/data/wagi.txt");
 
         List<Castle> castleList = dataReader.getCastles();
         List<Bucket> bucketList = dataReader.getBuckets();

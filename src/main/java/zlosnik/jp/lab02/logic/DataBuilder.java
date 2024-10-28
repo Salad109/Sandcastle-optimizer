@@ -1,8 +1,8 @@
-package jp.lab02.zlosnik.logic;
+package zlosnik.jp.lab02.logic;
 
-import jp.lab02.zlosnik.objects.Bucket;
-import jp.lab02.zlosnik.objects.Castle;
-import jp.lab02.zlosnik.Main;
+import zlosnik.jp.lab02.objects.Bucket;
+import zlosnik.jp.lab02.objects.Castle;
+import zlosnik.jp.lab02.Main;
 
 import java.util.*;
 

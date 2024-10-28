@@ -1,4 +1,4 @@
-package jp.lab02.zlosnik.logic;
+package zlosnik.jp.lab02.logic;
 
 public record WeightsCalculator(double leftoverSandValue, double heightValue) {
 
